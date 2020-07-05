@@ -5,12 +5,8 @@ echo Files in workdir:
 ls
 echo ----
 
-python3 read_influx.py
-
-echo ----
-echo Files in workdir:
-ls
-echo ----
-
 echo Start server...
-python3 -m http.server 8000
+nohup python3 -m http.server 8000 &
+
+echo Run script...
+python3 read_influx.py

@@ -107,7 +107,7 @@ while True:
         "legend_orientation": "h"
     }
     fig = go.Figure(data=data, layout=layout)
-    fig.write_html("./current-year-static.html", config={'staticPlot': False})
+    fig.write_html("./current-year-static.html", config={'staticPlot': True})
 
     print('End loop...')
     sleep(300)

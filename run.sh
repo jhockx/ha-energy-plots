@@ -1,12 +1,12 @@
 #!/usr/bin/with-contenv bashio
 
 CONFIG_PATH=/data/options.json
-HOST=$(jq --raw-output ".host" $CONFIG_PATH)
-PORT=$(jq --raw-output ".port" $CONFIG_PATH)
-USERNAME=$(jq --raw-output ".username" $CONFIG_PATH)
-PASSWORD=$(jq --raw-output ".password" $CONFIG_PATH)
-DAILY_ELECTRICITY_USAGE=$(jq --raw-output ".daily_electricity_usage" $CONFIG_PATH)
-DAILY_YIELD=$(jq --raw-output ".daily_yield" $CONFIG_PATH)
+HOST="$(bashio::config 'host')"
+PORT="$(bashio::config 'port')"
+USERNAME="$(bashio::config 'username')"
+PASSWORD="$(bashio::config 'password')"
+DAILY_ELECTRICITY_USAGE="$(bashio::config 'daily_electricity_usage')"
+DAILY_YIELD="$(bashio::config 'daily_yield')"
 
 echo ----
 echo Files in workdir:

@@ -1,6 +1,7 @@
 print('Start influx script')
 
 import calendar
+import sys
 from datetime import datetime, date
 from time import sleep
 
@@ -87,7 +88,7 @@ while True:
         y1=predicted_solar[now.year][now.month] / last_day_of_the_month.day,
         line={"color": "gray", "width": 4}
     )
-    fig.write_html("./current-month-static.html", config={'staticPlot': True})
+    fig.write_html("./src/current-month-static.html", config={'staticPlot': True})
 
     ##### YEARLY PLOTS #####
     # Build traces
@@ -107,7 +108,7 @@ while True:
         "legend_orientation": "h"
     }
     fig = go.Figure(data=data, layout=layout)
-    fig.write_html("./current-year-static.html", config={'staticPlot': True})
+    fig.write_html("./src/current-year-static.html", config={'staticPlot': True})
 
     print('End loop...')
     sleep(300)

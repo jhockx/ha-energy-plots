@@ -7,6 +7,7 @@ USERNAME="$(bashio::config 'username')"
 PASSWORD="$(bashio::config 'password')"
 DAILY_ELECTRICITY_USAGE="$(bashio::config 'daily_electricity_usage')"
 DAILY_YIELD="$(bashio::config 'daily_yield')"
+PREDICTED_SOLAR="$(bashio::config 'predicted_solar')"
 
 echo ----
 echo Files in workdir:
@@ -14,6 +15,7 @@ ls
 echo ----
 echo "${DAILY_ELECTRICITY_USAGE}"
 echo "${DAILY_YIELD}"
+echo "${PREDICTED_SOLAR}"
 python3 src/test.py "${DAILY_ELECTRICITY_USAGE}" "${DAILY_YIELD}"
 
 echo Start server...

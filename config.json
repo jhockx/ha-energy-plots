@@ -6,8 +6,12 @@
   "arch": ["armv7"],
   "startup": "application",
   "boot": "auto",
-  "options": {},
-  "schema": {},
+  "options": {
+	"daily_electricity_usage": "YOUR_ENTITY"
+  },
+  "schema": {
+	"daily_electricity_usage": "str"
+  },
   "ports": {
     "8000/tcp": 8000
   }

@@ -1,16 +1,18 @@
 {
   "name": "Custom plots",
-  "version": "0.1",
+  "version": "0.12",
   "slug": "custom_plots",
   "description": "This addon lets you add custom plots to your Lovelace UI, specifically for solar, electricity and gas data. It is assumed you are running InfluxDB.",
   "arch": ["armv7"],
   "startup": "application",
   "boot": "auto",
   "options": {
-	"daily_electricity_usage": "YOUR_ENTITY"
+	"daily_electricity_usage": null,
+	"daily_yield": "test"
   },
   "schema": {
-	"daily_electricity_usage": "str"
+	"daily_electricity_usage": "str",
+	"daily_yield": "str"
   },
   "ports": {
     "8000/tcp": 8000

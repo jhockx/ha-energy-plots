@@ -16,10 +16,10 @@ echo ----
 echo "${DAILY_ELECTRICITY_USAGE}"
 echo "${DAILY_YIELD}"
 echo "${PREDICTED_SOLAR}"
-python3 src/test.py "${DAILY_ELECTRICITY_USAGE}" "${DAILY_YIELD}"
+python3 ./src/test.py "${HOST}" "${PORT}" "${USERNAME}" "${PASSWORD}" "${DAILY_ELECTRICITY_USAGE}" "${DAILY_YIELD}" "${PREDICTED_SOLAR}"
 
 echo Start server...
 nohup python3 -m http.server 8000 --directory ./src &
 
 echo Run script...
-python3 src/read_influx.py
+python3 ./src/plot_electricity.py "${HOST}" "${PORT}" "${USERNAME}" "${PASSWORD}" "${DAILY_ELECTRICITY_USAGE}" "${DAILY_YIELD}" "${PREDICTED_SOLAR}"

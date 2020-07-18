@@ -7,11 +7,19 @@
   "startup": "application",
   "boot": "auto",
   "options": {
+	"host": null,
+	"port": null,
+	"username": null,
+	"password": null,
 	"daily_electricity_usage": null,
 	"daily_yield": null,
 	"predicted_solar": null
   },
   "schema": {
+	"host": "str",
+	"port": "int",
+	"username": "str",
+	"password": "str",
 	"daily_electricity_usage": "str",
 	"daily_yield": "str",
 	"predicted_solar": "str"

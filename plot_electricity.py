@@ -10,10 +10,12 @@ import plotly.graph_objs as go
 from influxdb import DataFrameClient
 
 # Influxdb settings
-host = ''
-port = 8086
-username = ''
-password = ''
+host = sys.argv[1]
+port = int(sys.argv[2])
+username = sys.argv[3]
+password = sys.argv[4]
+daily_electricity_usage = sys.argv[5]
+daily_yield = sys.argv[6]
 predicted_solar = {
     2020: {1: 98.07, 2: 161.26, 3: 272.15, 4: 325.21, 5: 364.55, 6: 358.59,
            7: 366.34, 8: 345.47, 9: 284.96, 10: 210.15, 11: 120.13, 12: 73.92}
@@ -66,9 +68,9 @@ while True:
 
     ##### MONTHLY PLOTS #####
     # Build traces
-    df = get_df_current_month('daily_electricity_usage_total', 'kWh', now, last_day_of_the_month)
+    df = get_df_current_month(daily_electricity_usage, 'kWh', now, last_day_of_the_month)
     trace1 = go.Bar(name='Verbruik totaal', x=df.index, y=df['value'], marker_color='blue')
-    df = get_df_current_month('daily_yield', 'kWh', now, last_day_of_the_month)
+    df = get_df_current_month(daily_yield, 'kWh', now, last_day_of_the_month)
     trace2 = go.Bar(name='Opbrengst', x=df.index, y=df['value'], marker_color='limegreen')
 
     # Plotly build figure
@@ -92,9 +94,9 @@ while True:
 
     ##### YEARLY PLOTS #####
     # Build traces
-    df = get_df_current_year('daily_electricity_usage_total', 'kWh', now)
+    df = get_df_current_year(daily_electricity_usage, 'kWh', now)
     trace1 = go.Bar(name='Verbruik totaal', x=df.index, y=df['value'], marker_color='blue')
-    df = get_df_current_year('daily_yield', 'kWh', now)
+    df = get_df_current_year(daily_yield, 'kWh', now)
     trace2 = go.Bar(name='Opbrengst', x=df.index, y=df['value'], marker_color='limegreen')
     x_solar_predicted = [pd.to_datetime(date(now.year, month, 1)) for month in predicted_solar[now.year].keys()]
     y_solar_predicted = list(predicted_solar[now.year].values())

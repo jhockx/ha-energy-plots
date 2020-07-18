@@ -5,7 +5,7 @@ ENV LANG C.UTF-8
 
 WORKDIR /src
 COPY run.sh /
-COPY read_influx.py ./
+COPY plot_electricity.py ./
 COPY test.py ./
 
 WORKDIR /

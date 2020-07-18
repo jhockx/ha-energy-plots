@@ -5,7 +5,10 @@ ENV LANG C.UTF-8
 
 WORKDIR /src
 COPY run.sh /
-COPY read_influx.py ./
+COPY ./src/utils.py ./
+COPY ./src/plot_electricity.py ./
+COPY ./src/test.py ./
 
+WORKDIR /
 RUN chmod a+x /run.sh
 CMD [ "/run.sh" ]

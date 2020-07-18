@@ -5,9 +5,9 @@ ENV LANG C.UTF-8
 
 WORKDIR /src
 COPY run.sh /
-COPY utils.py ./
-COPY plot_electricity.py ./
-COPY test.py ./
+COPY ./src/utils.py ./
+COPY ./src/plot_electricity.py ./
+COPY ./src/test.py ./
 
 WORKDIR /
 RUN chmod a+x /run.sh

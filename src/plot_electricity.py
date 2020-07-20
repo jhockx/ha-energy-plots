@@ -23,10 +23,19 @@ client = DataFrameClient(host=host, port=port, username=username, password=passw
 
 while True:
     print('Start loop...')
+
+    # Set variables
     now = datetime.now()
     first_day_of_the_month = pd.to_datetime(date(now.year, now.month, 1), utc=True)
     last_day_of_the_month = pd.to_datetime(date(now.year, now.month, calendar.monthrange(now.year, now.month)[1]),
                                            utc=True)
+
+    # Set layout for all plots
+    layout = {
+        "yaxis": dict(title='kWh'),
+        "margin": dict(l=0, r=0, t=0, b=20),
+        "legend_orientation": "h"
+    }
 
     ##### MONTHLY PLOTS #####
     # Build traces
@@ -34,7 +43,7 @@ while True:
 
     if daily_electricity_usage is not None:
         df = get_df_current_month(client, daily_electricity_usage, 'kWh', now, last_day_of_the_month)
-        trace1 = go.Bar(name='Verbruik totaal', x=df.index, y=df['value'], marker_color='blue')
+        trace1 = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
         data.append(trace1)
 
     if daily_yield is not None:
@@ -43,12 +52,8 @@ while True:
         data.append(trace2)
 
     # Build figure
-    layout = {
-        "yaxis": dict(title='kWh'),
-        "margin": dict(l=0, r=0, t=0, b=1),
-        "legend_orientation": "h"
-    }
     fig = go.Figure(data=data, layout=layout)
+    fig.update_layout(xaxis_tickformat='%d %b')
 
     # Add predicted solar line
     if predicted_solar is not None:
@@ -63,7 +68,7 @@ while True:
         )
 
     # Save figure
-    fig.write_html("./src/current-month-static.html", config={'staticPlot': True})
+    fig.write_html("./src/electricity-current-month-static.html", config={'staticPlot': True})
 
     ##### YEARLY PLOTS #####
     # Build traces
@@ -71,7 +76,7 @@ while True:
 
     if daily_electricity_usage is not None:
         df = get_df_current_year(client, daily_electricity_usage, 'kWh', now)
-        trace1 = go.Bar(name='Verbruik totaal', x=df.index, y=df['value'], marker_color='blue')
+        trace1 = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
         data.append(trace1)
 
     if daily_yield is not None:
@@ -87,15 +92,11 @@ while True:
         data.append(trace3)
 
     # Build figure
-    layout = {
-        "yaxis": dict(title='kWh'),
-        "margin": dict(l=0, r=0, t=0, b=1),
-        "legend_orientation": "h"
-    }
     fig = go.Figure(data=data, layout=layout)
+    fig.update_layout(xaxis_tickformat='%b')
 
     # Save figure
-    fig.write_html("./src/current-year-static.html", config={'staticPlot': True})
+    fig.write_html("./src/electricity-current-year-static.html", config={'staticPlot': True})
 
     print('End loop...')
     sleep(300)

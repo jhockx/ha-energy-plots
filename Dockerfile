@@ -7,6 +7,7 @@ WORKDIR /src
 COPY run.sh /
 COPY ./src/utils.py ./
 COPY ./src/plot_electricity.py ./
+COPY ./src/plot_gas.py ./
 COPY ./src/test.py ./
 
 WORKDIR /

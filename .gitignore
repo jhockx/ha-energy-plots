@@ -1,0 +1,6 @@
+.idea
+Pipfile
+Pipfile.lock
+*.html
+__pycache__
+

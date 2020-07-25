@@ -1,0 +1,34 @@
+{
+  "name": "Energy Plots",
+  "version": "0.1",
+  "slug": "energy_plots",
+  "description": "This addon makes plots for your energy data, specifically for electricity, solar and gas data. It is assumed you are running InfluxDB as long term data storage.",
+  "arch": [
+    "armv7"
+  ],
+  "startup": "application",
+  "boot": "auto",
+  "options": {
+    "host": null,
+    "port": null,
+    "username": null,
+    "password": null,
+    "daily_gas_usage": null,
+    "daily_electricity_usage": null,
+    "daily_yield": null,
+    "predicted_solar": null
+  },
+  "schema": {
+    "host": "str",
+    "port": "int",
+    "username": "str",
+    "password": "str",
+    "daily_gas_usage": "str",
+    "daily_electricity_usage": "str",
+    "daily_yield": "str",
+    "predicted_solar": "str"
+  },
+  "ports": {
+    "8000/tcp": 8000
+  }
+}

@@ -15,8 +15,6 @@ echo Files in workdir:
 ls
 echo ----
 
-python3 ./src/test.py "${HOST}" "${PORT}" "${USERNAME}" "${PASSWORD}" "${DAILY_GAS_USAGE}"
-
 echo Start server...
 nohup python3 -m http.server 8000 --directory ./src &
 

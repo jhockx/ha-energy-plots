@@ -19,7 +19,7 @@ daily_gas_usage = sys.argv[5] if sys.argv[5] != 'none' else None
 client = DataFrameClient(host=host, port=port, username=username, password=password)
 
 while True:
-    print('Start loop...')
+    print('Start loop plot_gas...')
 
     # Set variables
     now = datetime.now()
@@ -67,5 +67,5 @@ while True:
     # Save figure
     fig.write_html("./src/gas-current-year-static.html", config={'staticPlot': True})
 
-    print('End loop...')
+    print('End loop plot_gas...')
     sleep(300)

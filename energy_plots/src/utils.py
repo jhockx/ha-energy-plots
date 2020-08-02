@@ -7,7 +7,6 @@ def get_df_current_month(client, entity, unit, now, last_day_of_the_month):
     # Get daily data
     result = client.query(f"SELECT entity_id, value FROM homeassistant.infinite.{unit} WHERE entity_id = '{entity}' "
                           f"AND time >= now() - 31d")
-    print(result)
     df = result[f'{unit}']
     df = df.sort_index().resample('D').max()
 

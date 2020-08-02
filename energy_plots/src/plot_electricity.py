@@ -22,7 +22,7 @@ predicted_solar = json.loads(sys.argv[7]) if sys.argv[7] != 'none' else None
 client = DataFrameClient(host=host, port=port, username=username, password=password)
 
 while True:
-    print('Start loop...')
+    print('Start loop plot_electricity...')
 
     # Set variables
     now = datetime.now()
@@ -98,5 +98,5 @@ while True:
     # Save figure
     fig.write_html("./src/electricity-current-year-static.html", config={'staticPlot': True})
 
-    print('End loop...')
+    print('End loop plot_electricity...')
     sleep(300)

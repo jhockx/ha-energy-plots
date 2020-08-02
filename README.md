@@ -13,8 +13,19 @@ And replace `YOUR_STATIC_IP` with the correct IP address. This will give you the
 - To let this addon on work, you need to fill in all the settings under the `Configuration` panel after installation.
 
 ### Exmple plots
-Monthly electricity:  
-![Monthly electricity](assets/example_monthly_electrcity.png "Monthly electricity")
+*Note: for the following plots, data collection started halfway June.*  
+
+**Monthly electricity:**  
+![Monthly electricity](assets/example_monthly_electricity.png "Monthly electricity")
+
+**Yearly electricity:**  
+![Yearly electricity](assets/example_yearly_electricity.png "Yearly electricity")
+
+**Monthly gas:**  
+![Monthly gas](assets/example_monthly_gas.png "Monthly gas")
+
+**Yearly gas:**  
+![Yearly gas](assets/example_yearly_gas.png "Yearly gas")
 
 
 ### Development notes

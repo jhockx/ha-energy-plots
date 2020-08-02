@@ -15,8 +15,9 @@ def get_df_current_month(client, entity, unit, now, last_day_of_the_month):
     df = df[df.index.month == now.month]
 
     # Add empty value on the last day of the month for the plot if it doesn't exist
-    if df.index[-1] != last_day_of_the_month:
-        df = df.append(pd.DataFrame(index=[last_day_of_the_month], data=[[entity, 0]], columns=['entity_id', 'value']))
+    if df.empty is False and df.index[-1] != last_day_of_the_month:
+        df = df.append(pd.DataFrame(index=[last_day_of_the_month], data=[[entity, 0]], columns=['entity_id', 'value']),
+                       sort=True)
     return df
 
 
@@ -35,11 +36,11 @@ def get_df_current_year(client, entity, unit, now):
     df['entity_id'] = entity
 
     # # Add empty value on the first and last day of the year for the plot if it doesn't exist
-    if df.index[0] != beginning_of_current_year:
+    if df.empty is False and df.index[0] != beginning_of_current_year:
         df = df.append(pd.DataFrame(index=[beginning_of_current_year], data=[[entity, 0]],
-                                    columns=['entity_id', 'value']))
-    if df.index[-1] != end_of_current_year:
+                                    columns=['entity_id', 'value']), sort=True)
+    if df.empty is False and df.index[-1] != end_of_current_year:
         df = df.append(pd.DataFrame(index=[end_of_current_year], data=[[entity, 0]],
-                                    columns=['entity_id', 'value']))
+                                    columns=['entity_id', 'value']), sort=True)
     df = df.sort_index()
     return df

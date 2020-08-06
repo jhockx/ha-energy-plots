@@ -1,7 +1,7 @@
 import calendar
 import json
 import sys
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from time import sleep
 
 import pandas as pd
@@ -32,6 +32,7 @@ while True:
 
     # Set layout for all plots
     layout = {
+        "xaxis": dict(range=[first_day_of_the_month, last_day_of_the_month]),
         "yaxis": dict(title='kWh'),
         "margin": dict(l=0, r=0, t=0, b=20),
         "legend_orientation": "h"
@@ -51,21 +52,18 @@ while True:
         trace2 = go.Bar(name='Opbrengst', x=df.index, y=df['value'], marker_color='limegreen')
         data.append(trace2)
 
+    if predicted_solar is not None:
+        predicted_solar_monthly_avg = predicted_solar[str(now.year)][str(now.month)] / last_day_of_the_month.day
+        df = pd.DataFrame(data=[[first_day_of_the_month - timedelta(days=1), predicted_solar_monthly_avg],
+                                [last_day_of_the_month + timedelta(days=1), predicted_solar_monthly_avg]],
+                          columns=['date', 'value'])
+        trace2 = go.Scatter(name='Prognose', x=df['date'], y=df['value'], mode='lines', marker_color='gray',
+                            line={'width': 4})
+        data.append(trace2)
+
     # Build figure
     fig = go.Figure(data=data, layout=layout)
     fig.update_layout(xaxis_tickformat='%d %b')
-
-    # Add predicted solar line
-    if predicted_solar is not None:
-        fig.add_shape(
-            # Predicted (mean) solar horizontal line
-            type="line",
-            x0=first_day_of_the_month,
-            y0=predicted_solar[str(now.year)][str(now.month)] / last_day_of_the_month.day,
-            x1=last_day_of_the_month,
-            y1=predicted_solar[str(now.year)][str(now.month)] / last_day_of_the_month.day,
-            line={"color": "gray", "width": 4}
-        )
 
     # Save figure
     fig.write_html("./src/electricity-current-month-static.html", config={'staticPlot': True})

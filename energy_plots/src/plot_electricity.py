@@ -32,7 +32,6 @@ while True:
 
     # Set layout for all plots
     layout = {
-        "xaxis": dict(range=[first_day_of_the_month, last_day_of_the_month]),
         "yaxis": dict(title='kWh'),
         "margin": dict(l=0, r=0, t=0, b=20),
         "legend_orientation": "h"
@@ -63,7 +62,9 @@ while True:
 
     # Build figure
     fig = go.Figure(data=data, layout=layout)
-    fig.update_layout(xaxis_tickformat='%d %b')
+    fig.update_layout(xaxis_tickformat='%d %b',
+                      xaxis={'range': [first_day_of_the_month - timedelta(days=0.5),
+                                       last_day_of_the_month + timedelta(days=0.5)]})
 
     # Save figure
     fig.write_html("./src/electricity-current-month-static.html", config={'staticPlot': True})

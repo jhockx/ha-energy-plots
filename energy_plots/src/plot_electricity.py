@@ -57,7 +57,7 @@ while True:
         df = pd.DataFrame(data=[[first_day_of_the_month - timedelta(days=1), predicted_solar_monthly_avg],
                                 [last_day_of_the_month + timedelta(days=1), predicted_solar_monthly_avg]],
                           columns=['date', 'value'])
-        trace2 = go.Scatter(name='Prognose', x=df['date'], y=df['value'], marker_color='gray')
+        trace2 = go.Scatter(name='Prognose', x=df['date'], y=df['value'], mode='lines', marker_color='gray')
         data.append(trace2)
 
     # Build figure

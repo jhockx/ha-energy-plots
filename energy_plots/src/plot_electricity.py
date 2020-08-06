@@ -16,7 +16,12 @@ username = sys.argv[3]
 password = sys.argv[4]
 daily_electricity_usage = sys.argv[5] if sys.argv[5] != 'none' else None
 daily_yield = sys.argv[6] if sys.argv[6] != 'none' else None
-predicted_solar = json.loads(sys.argv[7]) if sys.argv[7] != 'none' else None
+daily_electricity_usage_monthly_avg = bool(sys.argv[7]) if sys.argv[7] != 'none' else None
+daily_yield_monthly_avg = bool(sys.argv[8]) if sys.argv[8] != 'none' else None
+predicted_solar = json.loads(sys.argv[9]) if sys.argv[9] != 'none' else None
+
+print(daily_electricity_usage_monthly_avg)
+print(daily_yield_monthly_avg)
 
 # Pandas DataFrame results
 client = DataFrameClient(host=host, port=port, username=username, password=password)
@@ -65,6 +70,33 @@ while True:
     fig.update_layout(xaxis_tickformat='%d %b',
                       xaxis={'range': [first_day_of_the_month - timedelta(days=0.5),
                                        last_day_of_the_month + timedelta(days=0.5)]})
+
+    # Add lines for monthly averages
+    if daily_electricity_usage_monthly_avg:
+        df = get_df_current_month(client, daily_electricity_usage, 'kWh', now, last_day_of_the_month)
+        y = df['value'].mean()
+        fig.add_shape(
+            # Predicted (mean) solar horizontal line
+            type="line",
+            x0=first_day_of_the_month - timedelta(days=1),
+            y0=y,
+            x1=last_day_of_the_month + timedelta(days=1),
+            y1=y,
+            line={"color": "blue", "width": 4, "dash": "dash"}
+        )
+
+    if daily_yield_monthly_avg:
+        df = get_df_current_month(client, daily_yield, 'kWh', now, last_day_of_the_month)
+        y = df['value'].mean()
+        fig.add_shape(
+            # Predicted (mean) solar horizontal line
+            type="line",
+            x0=first_day_of_the_month - timedelta(days=1),
+            y0=y,
+            x1=last_day_of_the_month + timedelta(days=1),
+            y1=y,
+            line={"color": "limegreen", "width": 4, "dash": "dash"}
+        )
 
     # Save figure
     fig.write_html("./src/electricity-current-month-static.html", config={'staticPlot': True})

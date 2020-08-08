@@ -16,8 +16,8 @@ username = sys.argv[3]
 password = sys.argv[4]
 daily_electricity_usage = sys.argv[5] if sys.argv[5] != 'none' else None
 daily_yield = sys.argv[6] if sys.argv[6] != 'none' else None
-daily_electricity_usage_monthly_avg = sys.argv[7] == 'True' if sys.argv[7] != 'none' else None
-daily_yield_monthly_avg = sys.argv[8] == 'True' if sys.argv[8] != 'none' else None
+daily_electricity_usage_monthly_avg = sys.argv[7].capitalize() == 'True' if sys.argv[7] != 'none' else None
+daily_yield_monthly_avg = sys.argv[8].capitalize() == 'True' if sys.argv[8] != 'none' else None
 predicted_solar = json.loads(sys.argv[9]) if sys.argv[9] != 'none' else None
 
 # Pandas DataFrame results

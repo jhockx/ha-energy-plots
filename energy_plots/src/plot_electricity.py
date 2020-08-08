@@ -45,55 +45,44 @@ while True:
 
     if daily_electricity_usage is not None:
         df = get_df_current_month(client, daily_electricity_usage, 'kWh', now, last_day_of_the_month)
-        trace1 = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
-        data.append(trace1)
+        trace = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
+        data.append(trace)
+        if daily_electricity_usage_monthly_avg:
+            y = df['value'].mean()
+            df = pd.DataFrame(data=[[first_day_of_the_month - timedelta(days=1), y],
+                                    [last_day_of_the_month + timedelta(days=1), y]],
+                              columns=['date', 'value'])
+            trace = go.Scatter(name='Gem. verbruik', x=df['date'], y=df['value'], mode='lines',
+                               marker_color='blue', line={'width': 2, "dash": "dash"})
+            data.append(trace)
 
     if daily_yield is not None:
         df = get_df_current_month(client, daily_yield, 'kWh', now, last_day_of_the_month)
-        trace2 = go.Bar(name='Opbrengst', x=df.index, y=df['value'], marker_color='limegreen')
-        data.append(trace2)
+        trace = go.Bar(name='Opbrengst', x=df.index, y=df['value'], marker_color='limegreen')
+        data.append(trace)
+        if daily_yield_monthly_avg:
+            y = df['value'].mean()
+            df = pd.DataFrame(data=[[first_day_of_the_month - timedelta(days=1), y],
+                                    [last_day_of_the_month + timedelta(days=1), y]],
+                              columns=['date', 'value'])
+            trace = go.Scatter(name='Gem. opbrengst', x=df['date'], y=df['value'], mode='lines',
+                               marker_color='limegreen', line={'width': 2, "dash": "dash"})
+            data.append(trace)
 
     if predicted_solar is not None:
         predicted_solar_monthly_avg = predicted_solar[str(now.year)][str(now.month)] / last_day_of_the_month.day
         df = pd.DataFrame(data=[[first_day_of_the_month - timedelta(days=1), predicted_solar_monthly_avg],
                                 [last_day_of_the_month + timedelta(days=1), predicted_solar_monthly_avg]],
                           columns=['date', 'value'])
-        trace2 = go.Scatter(name='Prognose', x=df['date'], y=df['value'], mode='lines', marker_color='gray',
-                            line={'width': 4})
-        data.append(trace2)
+        trace = go.Scatter(name='Prognose', x=df['date'], y=df['value'], mode='lines',
+                           marker_color='gray', line={'width': 4})
+        data.append(trace)
 
     # Build figure
     fig = go.Figure(data=data, layout=layout)
     fig.update_layout(xaxis_tickformat='%d %b',
                       xaxis={'range': [first_day_of_the_month - timedelta(days=0.5),
                                        last_day_of_the_month + timedelta(days=0.5)]})
-
-    # Add lines for monthly averages
-    if daily_electricity_usage_monthly_avg:
-        df = get_df_current_month(client, daily_electricity_usage, 'kWh', now, last_day_of_the_month)
-        y = df['value'].mean()
-        fig.add_shape(
-            # Predicted (mean) solar horizontal line
-            type="line",
-            x0=first_day_of_the_month - timedelta(days=1),
-            y0=y,
-            x1=last_day_of_the_month + timedelta(days=1),
-            y1=y,
-            line={"color": "blue", "width": 2, "dash": "dash"}
-        )
-
-    if daily_yield_monthly_avg:
-        df = get_df_current_month(client, daily_yield, 'kWh', now, last_day_of_the_month)
-        y = df['value'].mean()
-        fig.add_shape(
-            # Predicted (mean) solar horizontal line
-            type="line",
-            x0=first_day_of_the_month - timedelta(days=1),
-            y0=y,
-            x1=last_day_of_the_month + timedelta(days=1),
-            y1=y,
-            line={"color": "limegreen", "width": 2, "dash": "dash"}
-        )
 
     # Save figure
     fig.write_html("./src/electricity-current-month-static.html", config={'staticPlot': True})

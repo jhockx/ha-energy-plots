@@ -16,7 +16,9 @@ username = sys.argv[3]
 password = sys.argv[4]
 daily_electricity_usage = sys.argv[5] if sys.argv[5] != 'none' else None
 daily_yield = sys.argv[6] if sys.argv[6] != 'none' else None
-predicted_solar = json.loads(sys.argv[7]) if sys.argv[7] != 'none' else None
+daily_electricity_usage_monthly_avg = sys.argv[7].capitalize() == 'True' if sys.argv[7] != 'none' else None
+daily_yield_monthly_avg = sys.argv[8].capitalize() == 'True' if sys.argv[8] != 'none' else None
+predicted_solar = json.loads(sys.argv[9]) if sys.argv[9] != 'none' else None
 
 # Pandas DataFrame results
 client = DataFrameClient(host=host, port=port, username=username, password=password)
@@ -43,22 +45,38 @@ while True:
 
     if daily_electricity_usage is not None:
         df = get_df_current_month(client, daily_electricity_usage, 'kWh', now, last_day_of_the_month)
-        trace1 = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
-        data.append(trace1)
+        trace = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
+        data.append(trace)
+        if daily_electricity_usage_monthly_avg:
+            y = df['value'].mean()
+            df = pd.DataFrame(data=[[first_day_of_the_month - timedelta(days=1), y],
+                                    [last_day_of_the_month + timedelta(days=1), y]],
+                              columns=['date', 'value'])
+            trace = go.Scatter(name='Gem. verbruik', x=df['date'], y=df['value'], mode='lines',
+                               marker_color='blue', line={'width': 2, "dash": "dash"})
+            data.append(trace)
 
     if daily_yield is not None:
         df = get_df_current_month(client, daily_yield, 'kWh', now, last_day_of_the_month)
-        trace2 = go.Bar(name='Opbrengst', x=df.index, y=df['value'], marker_color='limegreen')
-        data.append(trace2)
+        trace = go.Bar(name='Opbrengst', x=df.index, y=df['value'], marker_color='limegreen')
+        data.append(trace)
+        if daily_yield_monthly_avg:
+            y = df['value'].mean()
+            df = pd.DataFrame(data=[[first_day_of_the_month - timedelta(days=1), y],
+                                    [last_day_of_the_month + timedelta(days=1), y]],
+                              columns=['date', 'value'])
+            trace = go.Scatter(name='Gem. opbrengst', x=df['date'], y=df['value'], mode='lines',
+                               marker_color='limegreen', line={'width': 2, "dash": "dash"})
+            data.append(trace)
 
     if predicted_solar is not None:
         predicted_solar_monthly_avg = predicted_solar[str(now.year)][str(now.month)] / last_day_of_the_month.day
         df = pd.DataFrame(data=[[first_day_of_the_month - timedelta(days=1), predicted_solar_monthly_avg],
                                 [last_day_of_the_month + timedelta(days=1), predicted_solar_monthly_avg]],
                           columns=['date', 'value'])
-        trace2 = go.Scatter(name='Prognose', x=df['date'], y=df['value'], mode='lines', marker_color='gray',
-                            line={'width': 4})
-        data.append(trace2)
+        trace = go.Scatter(name='Prognose', x=df['date'], y=df['value'], mode='lines',
+                           marker_color='gray', line={'width': 4})
+        data.append(trace)
 
     # Build figure
     fig = go.Figure(data=data, layout=layout)

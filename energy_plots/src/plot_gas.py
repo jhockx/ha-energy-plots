@@ -1,6 +1,6 @@
 import calendar
 import sys
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from time import sleep
 
 import pandas as pd
@@ -14,6 +14,7 @@ port = int(sys.argv[2])
 username = sys.argv[3]
 password = sys.argv[4]
 daily_gas_usage = sys.argv[5] if sys.argv[5] != 'none' else None
+daily_gas_usage_monthly_avg = sys.argv[6].capitalize() == 'True' if sys.argv[6] != 'none' else None
 
 # Pandas DataFrame results
 client = DataFrameClient(host=host, port=port, username=username, password=password)
@@ -41,12 +42,23 @@ while True:
 
     if daily_gas_usage is not None:
         df = get_df_current_month(client, daily_gas_usage, 'm3', now, last_day_of_the_month)
-        trace1 = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
-        data.append(trace1)
+        trace = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
+        data.append(trace)
+        if daily_gas_usage_monthly_avg:
+            y = df['value'].mean()
+            df = pd.DataFrame(data=[[first_day_of_the_month - timedelta(days=1), y],
+                                    [last_day_of_the_month + timedelta(days=1), y]],
+                              columns=['date', 'value'])
+            trace = go.Scatter(name='Gem. verbruik', x=df['date'], y=df['value'], mode='lines',
+                               marker_color='blue', line={'width': 2, "dash": "dash"})
+            data.append(trace)
 
     # Build figure
     fig = go.Figure(data=data, layout=layout)
-    fig.update_layout(xaxis_tickformat='%d %b')
+    fig.update_layout(xaxis_tickformat='%d %b',
+                      xaxis={'range': [first_day_of_the_month - timedelta(days=0.5),
+                                       last_day_of_the_month + timedelta(days=0.5)]}
+                      )
 
     # Save figure
     fig.write_html("./src/gas-current-month-static.html", config={'staticPlot': True})

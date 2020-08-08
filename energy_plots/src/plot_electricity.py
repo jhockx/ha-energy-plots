@@ -20,9 +20,6 @@ daily_electricity_usage_monthly_avg = sys.argv[7] == 'True' if sys.argv[7] != 'n
 daily_yield_monthly_avg = sys.argv[8] == 'True' if sys.argv[8] != 'none' else None
 predicted_solar = json.loads(sys.argv[9]) if sys.argv[9] != 'none' else None
 
-print(daily_electricity_usage_monthly_avg)
-print(daily_yield_monthly_avg)
-
 # Pandas DataFrame results
 client = DataFrameClient(host=host, port=port, username=username, password=password)
 

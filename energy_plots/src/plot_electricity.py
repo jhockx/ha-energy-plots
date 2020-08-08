@@ -79,7 +79,7 @@ while True:
             y0=y,
             x1=last_day_of_the_month + timedelta(days=1),
             y1=y,
-            line={"color": "blue", "width": 4, "dash": "dash"}
+            line={"color": "blue", "width": 2, "dash": "dash"}
         )
 
     if daily_yield_monthly_avg:
@@ -92,7 +92,7 @@ while True:
             y0=y,
             x1=last_day_of_the_month + timedelta(days=1),
             y1=y,
-            line={"color": "limegreen", "width": 4, "dash": "dash"}
+            line={"color": "limegreen", "width": 2, "dash": "dash"}
         )
 
     # Save figure

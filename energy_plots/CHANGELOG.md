@@ -1,3 +1,7 @@
+## [0.12.0] - 2020-08-08
+### Added
+- Added average lines in month plots
+
 ## [0.11.2] - 2020-08-06
 ### Fixed
 - Hotfixed x-axis limits

@@ -41,7 +41,7 @@ while True:
     data = []
 
     if daily_gas_usage is not None:
-        df = get_df_current_month(client, daily_gas_usage, 'm3', now, last_day_of_the_month)
+        df = get_df_current_month(client, daily_gas_usage, 'm3', first_day_of_the_month, last_day_of_the_month)
         trace = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
         data.append(trace)
         if daily_gas_usage_monthly_avg:

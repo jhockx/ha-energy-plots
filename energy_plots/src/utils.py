@@ -3,15 +3,17 @@ from datetime import date
 import pandas as pd
 
 
-def get_df_current_month(client, entity, unit, now, last_day_of_the_month):
+def get_df_current_month(client, entity, unit, first_day_of_the_month, last_day_of_the_month):
     # Get daily data
+    print(last_day_of_the_month.strftime('%Y-%m-%dT%H:%M:%SZ'))
     result = client.query(f"SELECT entity_id, value FROM homeassistant.infinite.{unit} WHERE entity_id = '{entity}' "
-                          f"AND time >= now() - 31d")
+                          f"AND time >= '{first_day_of_the_month.strftime('%Y-%m-%dT%H:%M:%SZ')}'")
+    print(result)
     df = result[f'{unit}']
     df = df.sort_index().resample('D').max()
 
     # Filter data this month
-    df = df[df.index.month == now.month]
+    df = df[df.index.month == first_day_of_the_month.month]
 
     # Add empty value on the last day of the month for the plot if it doesn't exist
     if df.empty is False and df.index[-1] != last_day_of_the_month:
@@ -23,7 +25,7 @@ def get_df_current_month(client, entity, unit, now, last_day_of_the_month):
 def get_df_current_year(client, entity, unit, now):
     # Get daily data
     result = client.query(f"SELECT entity_id, value FROM homeassistant.infinite.{unit} WHERE entity_id = '{entity}' "
-                          f"AND time >= now() - 365d")
+                          f"AND time >= '{now.strftime('%Y-%m-%dT%H:%M:%SZ')}' - 365d")
     df = result[f'{unit}']
     df = df.sort_index().resample('D').max()
     df = df.sort_index().resample('M', kind='period').sum().to_timestamp()  # returns first day on each month

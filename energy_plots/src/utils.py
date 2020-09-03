@@ -5,10 +5,8 @@ import pandas as pd
 
 def get_df_current_month(client, entity, unit, first_day_of_the_month, last_day_of_the_month):
     # Get daily data
-    print(last_day_of_the_month.strftime('%Y-%m-%dT%H:%M:%SZ'))
     result = client.query(f"SELECT entity_id, value FROM homeassistant.infinite.{unit} WHERE entity_id = '{entity}' "
                           f"AND time >= '{first_day_of_the_month.strftime('%Y-%m-%dT%H:%M:%SZ')}'")
-    print(result)
     df = result[f'{unit}']
     df = df.sort_index().resample('D').max()
 
@@ -36,7 +34,7 @@ def get_df_current_year(client, entity, unit, now):
     df = df[df.index.year == now.year]
     df['entity_id'] = entity
 
-    # # Add empty value on the first and last day of the year for the plot if it doesn't exist
+    # Add empty value on the first and last day of the year for the plot if it doesn't exist
     if df.empty is False and df.index[0] != beginning_of_current_year:
         df = df.append(pd.DataFrame(index=[beginning_of_current_year], data=[[entity, 0]],
                                     columns=['entity_id', 'value']), sort=True)

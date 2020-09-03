@@ -1,4 +1,4 @@
-## [0.11.2] - 2020-09-03
+## [0.12.1] - 2020-09-03
 ### Fixed
 - Incorrect plotting on the first of the month
 - Incorrect calculation of the average (the day before the first day of the month, which is always zero, was taken into account)

@@ -7,7 +7,7 @@ def get_df_current_month(client, entity, unit, first_day_of_the_month, last_day_
     # Get daily data
     result = client.query(f"SELECT entity_id, value FROM homeassistant.infinite.{unit} WHERE entity_id = '{entity}' "
                           f"AND time >= '{first_day_of_the_month.strftime('%Y-%m-%dT%H:%M:%SZ')}'")
-    df = result[f'{unit}']
+    df = result[unit]
     df = df.sort_index().resample('D').max()
 
     # Filter data this month
@@ -24,7 +24,7 @@ def get_df_current_year(client, entity, unit, now):
     # Get daily data
     result = client.query(f"SELECT entity_id, value FROM homeassistant.infinite.{unit} WHERE entity_id = '{entity}' "
                           f"AND time >= '{now.strftime('%Y-%m-%dT%H:%M:%SZ')}' - 365d")
-    df = result[f'{unit}']
+    df = result[unit]
     df = df.sort_index().resample('D').max()
     df = df.sort_index().resample('M', kind='period').sum().to_timestamp()  # returns first day on each month
 

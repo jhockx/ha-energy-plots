@@ -45,10 +45,12 @@ while True:
 
     if daily_electricity_usage is not None:
         df = get_df_current_month(client, daily_electricity_usage, 'kWh', first_day_of_the_month, last_day_of_the_month)
+        # Fill missing rows with zero
+        df = df.resample('D').max().fillna(0)
         trace = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
         data.append(trace)
         if daily_electricity_usage_monthly_avg:
-            y = df['value'].mean()
+            y = df['value'].replace(0, pd.np.nan).mean()
             df = pd.DataFrame(data=[[first_day_of_the_month - timedelta(days=1), y],
                                     [last_day_of_the_month + timedelta(days=1), y]],
                               columns=['date', 'value'])
@@ -58,10 +60,12 @@ while True:
 
     if daily_yield is not None:
         df = get_df_current_month(client, daily_yield, 'kWh', first_day_of_the_month, last_day_of_the_month)
+        # Fill missing rows with zero
+        df = df.resample('D').max().fillna(0)
         trace = go.Bar(name='Opbrengst', x=df.index, y=df['value'], marker_color='limegreen')
         data.append(trace)
         if daily_yield_monthly_avg:
-            y = df['value'].mean()
+            y = df['value'].replace(0, pd.np.nan).mean()
             df = pd.DataFrame(data=[[first_day_of_the_month - timedelta(days=1), y],
                                     [last_day_of_the_month + timedelta(days=1), y]],
                               columns=['date', 'value'])

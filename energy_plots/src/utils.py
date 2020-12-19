@@ -3,10 +3,17 @@ from datetime import date
 import pandas as pd
 
 
+class NoInfluxDataError(Exception):
+    pass
+
+
 def get_df_current_month(client, entity, unit, first_day_of_the_month, last_day_of_the_month):
     # Get daily data
     result = client.query(f"SELECT entity_id, value FROM homeassistant.infinite.{unit} WHERE entity_id = '{entity}' "
                           f"AND time >= '{first_day_of_the_month.strftime('%Y-%m-%dT%H:%M:%SZ')}'")
+    if result.empty:
+        raise NoInfluxDataError
+
     df = result[unit]
     df = df.sort_index().resample('D').max()
 
@@ -24,6 +31,9 @@ def get_df_current_year(client, entity, unit, now):
     # Get daily data
     result = client.query(f"SELECT entity_id, value FROM homeassistant.infinite.{unit} WHERE entity_id = '{entity}' "
                           f"AND time >= '{now.strftime('%Y-%m-%dT%H:%M:%SZ')}' - 365d")
+    if result.empty:
+        raise NoInfluxDataError
+
     df = result[unit]
     df = df.sort_index().resample('D').max()
     df = df.sort_index().resample('M', kind='period').sum().to_timestamp()  # returns first day on each month

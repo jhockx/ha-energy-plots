@@ -1,6 +1,6 @@
 {
   "name": "Energy Plots",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "slug": "energy_plots",
   "description": "This addon makes plots for your energy data, specifically for electricity, solar and gas data. It is assumed you are running InfluxDB as long term data storage.",
   "arch": [

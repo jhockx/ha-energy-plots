@@ -1,3 +1,7 @@
+## [0.12.2] - 2020-12-19
+### Fixed
+- Fix crash on the first of the month (no data)
+
 ## [0.12.1] - 2020-09-03
 ### Fixed
 - Incorrect plotting on the first of the month

@@ -11,7 +11,7 @@ def get_df_current_month(client, entity, unit, first_day_of_the_month, last_day_
     # Get daily data
     result = client.query(f"SELECT entity_id, value FROM homeassistant.infinite.{unit} WHERE entity_id = '{entity}' "
                           f"AND time >= '{first_day_of_the_month.strftime('%Y-%m-%dT%H:%M:%SZ')}'")
-    if result.empty:
+    if not result:
         raise NoInfluxDataError
 
     df = result[unit]
@@ -31,7 +31,7 @@ def get_df_current_year(client, entity, unit, now):
     # Get daily data
     result = client.query(f"SELECT entity_id, value FROM homeassistant.infinite.{unit} WHERE entity_id = '{entity}' "
                           f"AND time >= '{now.strftime('%Y-%m-%dT%H:%M:%SZ')}' - 365d")
-    if result.empty:
+    if not result:
         raise NoInfluxDataError
 
     df = result[unit]

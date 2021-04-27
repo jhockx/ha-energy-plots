@@ -1,26 +1,15 @@
-import calendar
-import json
-import traceback
-from datetime import timedelta, datetime
-from time import sleep
+from datetime import timedelta
 
 import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
-from influxdb import DataFrameClient
 
-from utils import get_df_current_month, get_df_current_year, NoInfluxDataError
-
-with open('./data/options.json', 'r') as f:
-    settings = json.load(f)
-settings['predicted solar'] = json.loads(settings['predicted solar'])
+from utils import get_df_current_month, get_df_current_year, get_first_and_last_day_of_the_month
 
 
-def make_plots(now):
+def make_electricity_plots(settings, client, now):
     # Set variables
-    first_day_of_the_month = pd.to_datetime(now.strftime('%Y-%m-01'), utc=True)
-    last_day_of_the_month = pd.to_datetime(now.strftime(f'%Y-%m-{calendar.monthrange(now.year, now.month)[1]}'),
-                                           utc=True)
+    first_day_of_the_month, last_day_of_the_month = get_first_and_last_day_of_the_month(now)
 
     # Set layout for all plots
     layout = {
@@ -34,8 +23,8 @@ def make_plots(now):
     data = []
 
     if settings['daily electricity usage db entity'] is not None:
-        df = get_df_current_month(client, settings['daily electricity usage db entity'], 'kWh', first_day_of_the_month,
-                                  last_day_of_the_month)
+        df = get_df_current_month(client, settings['daily electricity usage db entity'], settings['db_unit_prefix'],
+                                  settings['db_unit_suffix'], 'kWh', now)
         # Fill missing rows with zero
         df = df.resample('D').max().fillna(0)
         trace = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
@@ -50,8 +39,8 @@ def make_plots(now):
             data.append(trace)
 
     if settings['daily yield db entity'] is not None:
-        df = get_df_current_month(client, settings['daily yield db entity'], 'kWh', first_day_of_the_month,
-                                  last_day_of_the_month)
+        df = get_df_current_month(client, settings['daily yield db entity'], settings['db_unit_prefix'],
+                                  settings['db_unit_suffix'], 'kWh', now)
         # Fill missing rows with zero
         df = df.resample('D').max().fillna(0)
         trace = go.Bar(name='Opbrengst', x=df.index, y=df['value'], marker_color='limegreen')
@@ -83,18 +72,21 @@ def make_plots(now):
 
     # Save figure
     fig.write_html("./plots/electricity-current-month-static.html", config={'staticPlot': True})
+    fig.write_html(f"./plots/electricity-{now.year}-{now.month}.html")
 
     ##### YEARLY PLOTS #####
     # Build traces
     data = []
 
     if settings['daily electricity usage db entity'] is not None:
-        df = get_df_current_year(client, settings['daily electricity usage db entity'], 'kWh', now)
+        df = get_df_current_year(client, settings['daily electricity usage db entity'], settings['db_unit_prefix'],
+                                 settings['db_unit_suffix'], 'kWh', now)
         trace1 = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
         data.append(trace1)
 
     if settings['daily yield db entity'] is not None:
-        df = get_df_current_year(client, settings['daily yield db entity'], 'kWh', now)
+        df = get_df_current_year(client, settings['daily yield db entity'], settings['db_unit_prefix'],
+                                 settings['db_unit_suffix'], 'kWh', now)
         trace2 = go.Bar(name='Opbrengst', x=df.index, y=df['value'], marker_color='limegreen')
         data.append(trace2)
 
@@ -111,27 +103,4 @@ def make_plots(now):
 
     # Save figure
     fig.write_html("./plots/electricity-current-year-static.html", config={'staticPlot': True})
-
-
-# Pandas DataFrame query results
-client = DataFrameClient(host=settings['host'], port=settings['port'],
-                         username=settings['username'], password=settings['password'])
-
-while True:
-    try:
-        print('Start loop plot_electricity...')
-
-        now = datetime.now()
-        make_plots(now)
-
-        print('End loop plot_electricity...')
-
-    except NoInfluxDataError as e:
-        print(f'The database returned an empty DataFrame, this might be because it is the first of the month right '
-              f'after midnight, so there is no data yet. Continuing...')
-    except Exception as e:
-        print(f'The following error has occurred: {e}')
-        print(f'Traceback:\n{traceback.format_exc()}')
-        raise
-
-    sleep(300)
+    fig.write_html(f"./plots/electricity-{now.year}.html")

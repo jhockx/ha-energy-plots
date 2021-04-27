@@ -62,7 +62,8 @@ def make_gas_plots(settings, client, now):
 
     # Build figure
     fig = go.Figure(data=data, layout=layout)
-    fig.update_layout(xaxis_tickformat='%b')
+    fig.layout.xaxis.tickvals = pd.date_range(f'{now.year}-01', f'{now.year}-12', freq='MS')
+    fig.update_layout(xaxis_tickformat='%b', bargap=0.2)
 
     # Save figure
     fig.write_html("./plots/gas-current-year-static.html", config={'staticPlot': True})

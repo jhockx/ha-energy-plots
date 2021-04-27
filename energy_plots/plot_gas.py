@@ -1,25 +1,23 @@
 import calendar
-import sys
+import json
 import traceback
 from datetime import datetime, date, timedelta
 from time import sleep
 
+import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
 from influxdb import DataFrameClient
 
 from utils import get_df_current_month, get_df_current_year, NoInfluxDataError
 
-# Influxdb settings
-host = sys.argv[1]
-port = int(sys.argv[2])
-username = sys.argv[3]
-password = sys.argv[4]
-daily_gas_usage = sys.argv[5] if sys.argv[5] != 'none' else None
-daily_gas_usage_monthly_avg = sys.argv[6].capitalize() == 'True' if sys.argv[6] != 'none' else None
+with open('./data/options.json', 'r') as f:
+    settings = json.load(f)
+settings['predicted solar'] = json.loads(settings['predicted solar'])
 
 # Pandas DataFrame results
-client = DataFrameClient(host=host, port=port, username=username, password=password)
+client = DataFrameClient(host=settings['host'], port=settings['port'],
+                         username=settings['username'], password=settings['password'])
 
 while True:
     try:
@@ -43,14 +41,15 @@ while True:
         # Build traces
         data = []
 
-        if daily_gas_usage is not None:
-            df = get_df_current_month(client, daily_gas_usage, 'm3', first_day_of_the_month, last_day_of_the_month)
+        if settings['daily gas usage db entity'] is not None:
+            df = get_df_current_month(client, settings['daily gas usage db entity'], 'm3',
+                                      first_day_of_the_month, last_day_of_the_month)
             # Fill missing rows with zero
             df = df.resample('D').max().fillna(0)
             trace = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
             data.append(trace)
-            if daily_gas_usage_monthly_avg:
-                y = df['value'].replace(0, pd.np.nan).mean()
+            if settings['plot average gas usage']:
+                y = df['value'].replace(0, np.nan).mean()
                 df = pd.DataFrame(data=[[first_day_of_the_month - timedelta(days=1), y],
                                         [last_day_of_the_month + timedelta(days=1), y]],
                                   columns=['date', 'value'])
@@ -66,14 +65,14 @@ while True:
                           )
 
         # Save figure
-        fig.write_html("./src/gas-current-month-static.html", config={'staticPlot': True})
+        fig.write_html("./plots/gas-current-month-static.html", config={'staticPlot': True})
 
         ##### YEARLY PLOTS #####
         # Build traces
         data = []
 
-        if daily_gas_usage is not None:
-            df = get_df_current_year(client, daily_gas_usage, 'm3', now)
+        if settings['daily gas usage db entity'] is not None:
+            df = get_df_current_year(client, settings['daily gas usage db entity'], 'm3', now)
             trace1 = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
             data.append(trace1)
 
@@ -82,7 +81,7 @@ while True:
         fig.update_layout(xaxis_tickformat='%b')
 
         # Save figure
-        fig.write_html("./src/gas-current-year-static.html", config={'staticPlot': True})
+        fig.write_html("./plots/gas-current-year-static.html", config={'staticPlot': True})
 
         print('End loop plot_gas...')
 

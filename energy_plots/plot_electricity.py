@@ -15,8 +15,6 @@ with open('./data/options.json', 'r') as f:
     settings = json.load(f)
 settings['predicted solar'] = json.loads(settings['predicted solar'])
 
-print(settings)
-
 
 def make_plots(now):
     # Set variables

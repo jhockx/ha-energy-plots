@@ -37,7 +37,6 @@ def get_min_max_datetimes_from_db(client, entity, db_prefix, db_suffix, unit, mi
 
 
 def get_first_and_last_day_of_the_month(now):
-    # Set variables
     first_day_of_the_month = pd.to_datetime(now.strftime('%Y-%m-01'), utc=True)
     last_day_of_the_month = pd.to_datetime(now.strftime(f'%Y-%m-{calendar.monthrange(now.year, now.month)[1]}'),
                                            utc=True)
@@ -71,7 +70,6 @@ def get_df_current_month(client, entity, db_prefix, db_suffix, unit, now):
 
 
 def get_first_and_last_day_of_the_year(now):
-    # Set variables
     first_day_of_the_year = pd.to_datetime(now.strftime('%Y-01-01'), utc=True)
     last_day_of_the_year = pd.to_datetime(now.strftime(f'%Y-12-31'), utc=True)
 

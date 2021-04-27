@@ -22,7 +22,7 @@ def make_electricity_plots(settings, client, now):
     # Build traces
     data = []
 
-    if settings['daily electricity usage db entity'] is not None:
+    if settings.get('daily electricity usage db entity'):
         df = get_df_current_month(client, settings['daily electricity usage db entity'], settings['db_unit_prefix'],
                                   settings['db_unit_suffix'], 'kWh', now)
         # Fill missing rows with zero
@@ -38,7 +38,7 @@ def make_electricity_plots(settings, client, now):
                                marker_color='blue', line={'width': 2, "dash": "dash"})
             data.append(trace)
 
-    if settings['daily yield db entity'] is not None:
+    if settings.get('daily yield db entity'):
         df = get_df_current_month(client, settings['daily yield db entity'], settings['db_unit_prefix'],
                                   settings['db_unit_suffix'], 'kWh', now)
         # Fill missing rows with zero
@@ -54,7 +54,7 @@ def make_electricity_plots(settings, client, now):
                                marker_color='limegreen', line={'width': 2, "dash": "dash"})
             data.append(trace)
 
-    if settings['predicted solar'] is not None:
+    if settings.get('predicted solar'):
         predicted_solar_monthly_avg = settings['predicted solar'][str(now.year)][
                                           str(now.month)] / last_day_of_the_month.day
         df = pd.DataFrame(data=[[first_day_of_the_month - timedelta(days=1), predicted_solar_monthly_avg],
@@ -78,19 +78,19 @@ def make_electricity_plots(settings, client, now):
     # Build traces
     data = []
 
-    if settings['daily electricity usage db entity'] is not None:
+    if settings.get('daily electricity usage db entity'):
         df = get_df_current_year(client, settings['daily electricity usage db entity'], settings['db_unit_prefix'],
                                  settings['db_unit_suffix'], 'kWh', now)
         trace1 = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
         data.append(trace1)
 
-    if settings['daily yield db entity'] is not None:
+    if settings.get('daily yield db entity'):
         df = get_df_current_year(client, settings['daily yield db entity'], settings['db_unit_prefix'],
                                  settings['db_unit_suffix'], 'kWh', now)
         trace2 = go.Bar(name='Opbrengst', x=df.index, y=df['value'], marker_color='limegreen')
         data.append(trace2)
 
-    if settings['predicted solar'] is not None:
+    if settings.get('predicted solar'):
         x_solar_predicted = [pd.to_datetime(now.strftime(f'%Y-{month}-01')) for month in
                              settings['predicted solar'][str(now.year)].keys()]
         y_solar_predicted = list(settings['predicted solar'][str(now.year)].values())

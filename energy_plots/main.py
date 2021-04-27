@@ -12,7 +12,8 @@ from utils import NoInfluxDataError, get_min_max_datetimes_from_db
 
 with open('./data/options.json', 'r') as f:
     settings = json.load(f)
-settings['predicted solar'] = json.loads(settings['predicted solar'])
+if settings.get('predicted solar'):
+    settings['predicted solar'] = json.loads(settings['predicted solar'])
 
 # Pandas DataFrame query results
 client = DataFrameClient(host=settings['host'], port=settings['port'],

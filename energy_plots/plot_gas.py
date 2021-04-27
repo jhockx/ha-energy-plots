@@ -23,7 +23,7 @@ def make_gas_plots(settings, client, now):
     # Build traces
     data = []
 
-    if settings['daily gas usage db entity'] is not None:
+    if settings.get('daily gas usage db entity'):
         df = get_df_current_month(client, settings['daily gas usage db entity'], settings['db_unit_prefix'],
                                   settings['db_unit_suffix'], 'm3', now)
         # Fill missing rows with zero
@@ -54,7 +54,7 @@ def make_gas_plots(settings, client, now):
     # Build traces
     data = []
 
-    if settings['daily gas usage db entity'] is not None:
+    if settings.get('daily gas usage db entity'):
         df = get_df_current_year(client, settings['daily gas usage db entity'], settings['db_unit_prefix'],
                                  settings['db_unit_suffix'], 'm3', now)
         trace1 = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')

@@ -9,12 +9,18 @@ class NoInfluxDataError(Exception):
 
 def get_df_current_month(client, entity, unit, first_day_of_the_month, last_day_of_the_month):
     # Get daily data
-    result = client.query(f"SELECT entity_id, value FROM homeassistant.infinite.{unit} WHERE entity_id = '{entity}' "
-                          f"AND time >= '{first_day_of_the_month.strftime('%Y-%m-%dT%H:%M:%SZ')}'")
+    query = f"""
+    SELECT entity_id, value 
+    FROM "homeassistant"."infinite"."1m_{unit}_last" 
+    WHERE entity_id = '{entity}' 
+    AND time >= '{first_day_of_the_month.strftime('%Y-%m-%dT%H:%M:%SZ')}'
+    """
+    print(query)
+    result = client.query(query)
     if not result:
         raise NoInfluxDataError
 
-    df = result[unit]
+    df = result[f"1m_{unit}_last"]
     df = df.sort_index().resample('D').max()
 
     # Filter data this month

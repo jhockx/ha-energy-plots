@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
 
-from utils import get_first_and_last_day_of_the_month, get_df_current_month, get_df_current_year
+from app.utils import get_first_and_last_day_of_the_month, get_df_current_month, get_df_current_year
 
 
 def make_gas_plots(settings, client, now):

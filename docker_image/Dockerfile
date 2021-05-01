@@ -10,11 +10,16 @@ RUN apt-get install -y python3-pip
 RUN apt-get install -y python3-pandas
 RUN rm -rf /var/lib/apt/lists/*
 
-# RUN pip3 install pandas
+RUN pip3 install numpy
 RUN pip3 install influxdb
 RUN pip3 install plotly
+RUN pip3 install pytz
 
-# Run the following command to build the image: docker build - < Dockerfile
-# Run the following command to rename the image: docker tag local-image:tagname jhockx/ha-python:test
-# Or: docker tag image-id jhockx/ha-python:test
-# Run the following command to push to dockerhub: docker push jhockx/ha-python:test
+RUN pip3 install dash
+RUN pip3 install dash-bootstrap-components
+RUN pip3 install flask
+RUN pip3 install hypercorn
+
+# Run the following command to build and tag the image: docker build -t jhockx/ha-python:0.2 - < Dockerfile
+# Run the following command to rename the image: docker tag local-image:tagname jhockx/ha-python:0.2
+# Run the following command to push to dockerhub: docker push jhockx/ha-python:0.2

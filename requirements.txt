@@ -2,3 +2,8 @@ pandas
 numpy
 influxdb
 plotly
+pytz
+dash
+dash-bootstrap-components
+flask
+hypercorn

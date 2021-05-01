@@ -1,8 +1,7 @@
 .idea
 Pipfile
 Pipfile.lock
-*.html
 __pycache__
 venv
 data
-
+plots

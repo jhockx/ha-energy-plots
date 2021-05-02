@@ -2,21 +2,84 @@ import json
 
 from dash import callback_context
 from dash.dependencies import Input, Output, State, ALL, MATCH
+from dash.exceptions import PreventUpdate
 
 from app import app
+from app.layouts import dropdown_month_menu, fig_month, fig_year
 
 
 @app.callback(
-    Output({'type': 'dropdown-year-menu', 'energy_type': MATCH, 'tab': MATCH}, 'label'),
+    [
+        Output({'type': 'dropdown-year-menu', 'energy_type': MATCH, 'tab': MATCH}, 'label'),
+        Output({'type': 'dropdown-month-menu', 'energy_type': MATCH, 'tab': MATCH}, 'children'),
+        Output({'type': 'dropdown-month-menu', 'energy_type': MATCH, 'tab': MATCH}, 'disabled')
+    ],
     Input({'type': 'dropdown-year', 'index': ALL, 'energy_type': MATCH, 'tab': MATCH}, 'n_clicks'),
     [
         State({'type': 'dropdown-year', 'index': ALL, 'energy_type': MATCH, 'tab': MATCH}, 'children'),
         State({'type': 'dropdown-year-menu', 'energy_type': MATCH, 'tab': MATCH}, 'label')
     ]
 )
-def dropdown_click(n_clicks, children, label):
-    app.logger.info(callback_context.triggered[0])
+def dropdown_year_click(n_clicks, children, label_year):
+    clicked_element = None
     prop_id = callback_context.triggered[0]['prop_id']
-    index = json.loads(prop_id.rstrip('.n_clicks'))['index'] if prop_id != '.' else None
+    if prop_id != '.' and n_clicks.count(None) != len(n_clicks):
+        clicked_element = json.loads(prop_id.rstrip('.n_clicks'))
 
-    return list(children)[index] if index is not None else label
+    label_year = list(children)[clicked_element['index']] if clicked_element is not None else label_year
+    if label_year != 'Year':
+        months_dropdown_menu_items = dropdown_month_menu(
+            clicked_element['energy_type'],
+            clicked_element['tab'],
+            int(label_year)
+        )
+        months_dropdown_menu_disabled = False
+    else:
+        months_dropdown_menu_items = []
+        months_dropdown_menu_disabled = True
+
+    return label_year, months_dropdown_menu_items, months_dropdown_menu_disabled
+
+
+@app.callback(
+    Output({'type': 'dropdown-month-menu', 'energy_type': MATCH, 'tab': MATCH}, 'label'),
+    Input({'type': 'dropdown-month', 'index': ALL, 'energy_type': MATCH, 'tab': MATCH}, 'n_clicks'),
+    [
+        State({'type': 'dropdown-month', 'index': ALL, 'energy_type': MATCH, 'tab': MATCH}, 'children'),
+        State({'type': 'dropdown-month-menu', 'energy_type': MATCH, 'tab': MATCH}, 'label')
+    ]
+)
+def dropdown_month_click(n_clicks, children, label_month):
+    clicked_element = None
+    prop_id = callback_context.triggered[0]['prop_id']
+    if prop_id != '.' and n_clicks.count(None) != len(n_clicks):
+        clicked_element = json.loads(prop_id.rstrip('.n_clicks'))
+
+    label_month = list(children)[clicked_element['index']] if clicked_element is not None else label_month
+
+    return label_month
+
+
+@app.callback(
+    Output({'type': 'figure', 'energy_type': MATCH, 'tab': MATCH}, 'figure'),
+    [
+        Input({'type': 'dropdown-month-menu', 'energy_type': MATCH, 'tab': MATCH}, 'label'),
+        Input({'type': 'dropdown-year-menu', 'energy_type': MATCH, 'tab': MATCH}, 'label')
+    ]
+)
+def dropdown_month_click(label_month, label_year):
+    triggered_items = []
+    if label_year != 'Year':
+        for item in callback_context.triggered:
+            triggered_items.append(json.loads(item['prop_id'].rstrip('.label')))
+
+    if triggered_items:
+        tab = triggered_items[0]['tab']
+        energy_type = triggered_items[0]['energy_type']
+
+        if tab == 'month' and label_year != 'Year' and label_month != 'Month':
+            return fig_month(int(label_year), int(label_month), energy_type)
+        elif tab == 'year' and label_year != 'Year':
+            return fig_year(int(label_year), energy_type)
+
+    raise PreventUpdate

@@ -1,4 +1,7 @@
+from time import sleep
+
 import dash_bootstrap_components as dbc
+import dash_html_components as html
 from dash import Dash
 from flask import Flask
 
@@ -38,6 +41,12 @@ app.enable_dev_tools(
 # Set title and layout
 app.title = app.server.config['TITLE']
 app.layout = layouts.skeleton_layout
+app.validation_layout = html.Div([
+    layouts.skeleton_layout,
+    layouts.home_layout()
+])
+
+sleep(1)
 
 # Import the rest after initialization of app to prevent circular imports
 from app import backend, callbacks, routes

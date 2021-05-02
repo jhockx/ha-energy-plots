@@ -7,29 +7,11 @@ import dash_html_components as html
 
 from configs import dash_config
 
-skeleton_layout = html.Div([
-    # Routing
-    # https://dash.plotly.com/urls
-    dcc.Location(id='url', refresh=False),
 
-    # Navbar
-    # https://dash-bootstrap-components.opensource.faculty.ai/docs/components/navbar/
-    dbc.NavbarSimple(
-        brand=f'{dash_config.TITLE}',
-        color='primary',
-        dark=True,
-        children=[dbc.NavItem(dbc.NavLink(route['name'], href=route['url'])) for route in dash_config.ROUTES]
-    ),
-
-    # Routing
-    # https://dash.plotly.com/urls
-    html.Div(id='page-content')
-])
-
-
-def fig_year(year):
+##### HELPER METHODS #####
+def fig_year(year, energy_type):
     try:
-        with open(f'./plots/electricity-{year}.json', 'r') as f:
+        with open(f'./plots/{energy_type}-{year}.json', 'r') as f:
             fig = json.load(f)
     except:
         fig = {}
@@ -37,9 +19,9 @@ def fig_year(year):
     return fig
 
 
-def fig_month(year, month):
+def fig_month(year, month, energy_type):
     try:
-        with open(f'./plots/electricity-{year}-{month}.json', 'r') as f:
+        with open(f'./plots/{energy_type}-{year}-{month}.json', 'r') as f:
             fig = json.load(f)
     except:
         fig = {}
@@ -88,7 +70,7 @@ def dropdown_year_menu(energy_type, tab):
     return rv
 
 
-def electricity_layout(year=datetime.now().year, month=datetime.now().month):
+def energy_layout(year, month, energy_type):
     layout = dbc.Container([
         dbc.Row(html.Br()),
         dbc.Row([
@@ -98,9 +80,9 @@ def electricity_layout(year=datetime.now().year, month=datetime.now().month):
                         dbc.Card([
                             dbc.CardHeader(
                                 dbc.DropdownMenu(
-                                    id={'type': 'dropdown-year-menu', 'energy_type': 'electricity', 'tab': 'month'},
+                                    id={'type': 'dropdown-year-menu', 'energy_type': energy_type, 'tab': 'month'},
                                     label="Year",
-                                    children=dropdown_year_menu('electricity', 'month'),
+                                    children=dropdown_year_menu(energy_type, 'month'),
                                 )
                             ),
                             dbc.CardBody(
@@ -109,7 +91,7 @@ def electricity_layout(year=datetime.now().year, month=datetime.now().month):
                                         dbc.Col(
                                             dbc.Button(html.Span(['navigate_before'], className="material-icons")),
                                             width=1),
-                                        dbc.Col(dcc.Graph(figure=fig_month(year, month),
+                                        dbc.Col(dcc.Graph(figure=fig_month(year, month, energy_type),
                                                           style={'margin-top': '10px', 'margin-bottom': '10px'})),
                                         dbc.Col(
                                             dbc.Button(html.Span(['navigate_next'], className="material-icons")),
@@ -124,9 +106,9 @@ def electricity_layout(year=datetime.now().year, month=datetime.now().month):
                         dbc.Card([
                             dbc.CardHeader(
                                 dbc.DropdownMenu(
-                                    id={'type': 'dropdown-year-menu', 'energy_type': 'electricity', 'tab': 'year'},
+                                    id={'type': 'dropdown-year-menu', 'energy_type': energy_type, 'tab': 'year'},
                                     label="Year",
-                                    children=dropdown_year_menu('electricity', 'year'),
+                                    children=dropdown_year_menu(energy_type, 'year'),
                                 )
                             ),
                             dbc.CardBody(
@@ -135,7 +117,7 @@ def electricity_layout(year=datetime.now().year, month=datetime.now().month):
                                         dbc.Col(
                                             dbc.Button(html.Span(['navigate_before'], className="material-icons")),
                                             width=1),
-                                        dbc.Col(dcc.Graph(figure=fig_year(year),
+                                        dbc.Col(dcc.Graph(figure=fig_year(year, energy_type),
                                                           style={'margin-top': '10px', 'margin-bottom': '10px'})),
                                         dbc.Col(
                                             dbc.Button(html.Span(['navigate_next'], className="material-icons")),
@@ -153,3 +135,32 @@ def electricity_layout(year=datetime.now().year, month=datetime.now().month):
     ])
 
     return layout
+
+
+##### LAYOUTS #####
+skeleton_layout = html.Div([
+    # Routing
+    # https://dash.plotly.com/urls
+    dcc.Location(id='url', refresh=False),
+
+    # Navbar
+    # https://dash-bootstrap-components.opensource.faculty.ai/docs/components/navbar/
+    dbc.NavbarSimple(
+        brand=f'{dash_config.TITLE}',
+        color='primary',
+        dark=True,
+        children=[dbc.NavItem(dbc.NavLink(route['name'], href=route['url'])) for route in dash_config.ROUTES]
+    ),
+
+    # Routing
+    # https://dash.plotly.com/urls
+    html.Div(id='page-content')
+])
+
+
+def electricity_layout(year=datetime.now().year, month=datetime.now().month):
+    return energy_layout(year, month, 'electricity')
+
+
+def gas_layout(year=datetime.now().year, month=datetime.now().month):
+    return energy_layout(year, month, 'gas')

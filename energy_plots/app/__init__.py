@@ -43,7 +43,7 @@ app.title = app.server.config['TITLE']
 app.layout = layouts.skeleton_layout
 app.validation_layout = html.Div([
     layouts.skeleton_layout,
-    layouts.home_layout()
+    layouts.electricity_layout()
 ])
 
 sleep(1)

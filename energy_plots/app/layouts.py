@@ -47,7 +47,7 @@ def fig_month(year, month):
     return fig
 
 
-def home_layout(year=datetime.now().year, month=datetime.now().month):
+def electricity_layout(year=datetime.now().year, month=datetime.now().month):
     layout = dbc.Container([
         html.Div(id='test'),
         dbc.Row(html.Br()),

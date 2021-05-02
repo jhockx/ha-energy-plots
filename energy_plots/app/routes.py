@@ -14,6 +14,10 @@ def display_page(pathname):
     in this method, to have everything configurable in one place.
     """
     for route in app.server.config['ROUTES']:
+        # Reroute home page (doesn't change the url)
+        if pathname == '/':
+            pathname = '/electricity'
+
         if pathname == route['url']:
             # The layout objects are imported in the top of the script and are thus globals.
             # Here it is determined which layout is going to be returned

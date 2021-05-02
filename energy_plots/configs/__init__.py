@@ -14,7 +14,7 @@ class DashConfig:
 
     # Automatic routing
     ROUTES = [
-        {'name': 'Electricity', 'url': '/', 'layout': 'electricity_layout'},
+        {'name': 'Electricity', 'url': '/electricity', 'layout': 'electricity_layout'},
         {'name': 'Gas', 'url': '/gas', 'layout': 'gas_layout'}
     ]
 

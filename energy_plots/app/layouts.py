@@ -47,9 +47,49 @@ def fig_month(year, month):
     return fig
 
 
+def years_in_data(energy_type):
+    with open(f'./plots/{energy_type}-years', 'r') as f:
+        years_list = []
+
+        for line in list(set(f.readlines())):
+            years_list.append(int(line))
+
+        years_list.sort(reverse=True)
+
+    return years_list
+
+
+def months_in_data(energy_type, year):
+    with open(f'./plots/{energy_type}-months', 'r') as f:
+        months_list = []
+
+        for line in list(set(f.readlines())):
+            if year == int(line.split('-')[0]):
+                months_list.append(int(line.split('-')[1]))
+
+        months_list.sort(reverse=True)
+
+    return months_list
+
+
+def dropdown_year_menu(energy_type, tab):
+    years = years_in_data(energy_type)
+
+    rv = []
+    for index, year in enumerate(years):
+        rv.append(dbc.DropdownMenuItem(year,
+                                       id={
+                                           'type': f'dropdown-year',
+                                           'index': index,
+                                           'energy_type': energy_type,
+                                           'tab': tab
+                                       }))
+
+    return rv
+
+
 def electricity_layout(year=datetime.now().year, month=datetime.now().month):
     layout = dbc.Container([
-        html.Div(id='test'),
         dbc.Row(html.Br()),
         dbc.Row([
             dbc.Col([
@@ -58,16 +98,9 @@ def electricity_layout(year=datetime.now().year, month=datetime.now().month):
                         dbc.Card([
                             dbc.CardHeader(
                                 dbc.DropdownMenu(
-                                    id='month-tab-dropdown-year-menu',
+                                    id={'type': 'dropdown-year-menu', 'energy_type': 'electricity', 'tab': 'month'},
                                     label="Year",
-                                    children=[
-                                        dbc.DropdownMenuItem("Item 1",
-                                                             id={'type': 'month-tab-dropdown-year', 'index': 0}),
-                                        dbc.DropdownMenuItem("Item 2",
-                                                             id={'type': 'month-tab-dropdown-year', 'index': 1}),
-                                        dbc.DropdownMenuItem("Item 3",
-                                                             id={'type': 'month-tab-dropdown-year', 'index': 2}),
-                                    ],
+                                    children=dropdown_year_menu('electricity', 'month'),
                                 )
                             ),
                             dbc.CardBody(
@@ -88,7 +121,14 @@ def electricity_layout(year=datetime.now().year, month=datetime.now().month):
                         )
                         , label="Month"),
                     dbc.Tab(
-                        dbc.Card(
+                        dbc.Card([
+                            dbc.CardHeader(
+                                dbc.DropdownMenu(
+                                    id={'type': 'dropdown-year-menu', 'energy_type': 'electricity', 'tab': 'year'},
+                                    label="Year",
+                                    children=dropdown_year_menu('electricity', 'year'),
+                                )
+                            ),
                             dbc.CardBody(
                                 [
                                     dbc.Row([
@@ -102,7 +142,7 @@ def electricity_layout(year=datetime.now().year, month=datetime.now().month):
                                             width=1)
                                     ], align="center")
                                 ]
-                            ),
+                            )],
                             className="mt-3"
                         )
                         , label="Year"),

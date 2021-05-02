@@ -50,6 +50,8 @@ def make_gas_plots(settings, client, now):
     fig.write_html("./plots/gas-current-month-static.html", config={'staticPlot': True})
     with open(f"./plots/gas-{now.year}-{now.month}.json", 'w') as f:
         f.write(fig.to_json())
+    with open("./plots/gas-months", 'a') as f:
+        f.write(f'{now.year}-{now.month}\n')
 
     ##### YEARLY PLOTS #####
     # Build traces
@@ -70,3 +72,5 @@ def make_gas_plots(settings, client, now):
     fig.write_html("./plots/gas-current-year-static.html", config={'staticPlot': True})
     with open(f"./plots/gas-{now.year}.json", 'w') as f:
         f.write(fig.to_json())
+    with open("./plots/gas-years", 'a') as f:
+        f.write(f'{now.year}\n')

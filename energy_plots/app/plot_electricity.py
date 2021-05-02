@@ -75,6 +75,8 @@ def make_electricity_plots(settings, client, now):
     fig.write_html("./plots/electricity-current-month-static.html", config={'staticPlot': True})
     with open(f"./plots/electricity-{now.year}-{now.month}.json", 'w') as f:
         f.write(fig.to_json())
+    with open("./plots/electricity-months", 'a') as f:
+        f.write(f'{now.year}-{now.month}\n')
 
     ##### YEARLY PLOTS #####
     # Build traces
@@ -108,3 +110,5 @@ def make_electricity_plots(settings, client, now):
     fig.write_html("./plots/electricity-current-year-static.html", config={'staticPlot': True})
     with open(f"./plots/electricity-{now.year}.json", 'w') as f:
         f.write(fig.to_json())
+    with open("./plots/electricity-years", 'a') as f:
+        f.write(f'{now.year}\n')

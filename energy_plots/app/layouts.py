@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
@@ -25,59 +26,90 @@ skeleton_layout = html.Div([
     html.Div(id='page-content')
 ])
 
-try:
-    with open('./plots/electricity-2021.json', 'r') as f:
-        fig_year = json.load(f)
-except:
-    fig_year = {}
 
-try:
-    with open('./plots/electricity-2021-4.json', 'r') as f:
-        fig_month = json.load(f)
-except:
-    fig_month = {}
+def fig_year(year):
+    try:
+        with open(f'./plots/electricity-{year}.json', 'r') as f:
+            fig = json.load(f)
+    except:
+        fig = {}
 
-home_layout = dbc.Container([
-    dbc.Row(html.Br()),
-    dbc.Row([
-        dbc.Col([
-            dbc.Tabs([
-                dbc.Tab(
-                    dbc.Card([
-                        dbc.CardBody(
-                            [
-                                dbc.Row([
-                                    dbc.Col(dbc.Button(html.Span(['navigate_before'], className="material-icons")),
+    return fig
+
+
+def fig_month(year, month):
+    try:
+        with open(f'./plots/electricity-{year}-{month}.json', 'r') as f:
+            fig = json.load(f)
+    except:
+        fig = {}
+
+    return fig
+
+
+def home_layout(year=datetime.now().year, month=datetime.now().month):
+    layout = dbc.Container([
+        html.Div(id='test'),
+        dbc.Row(html.Br()),
+        dbc.Row([
+            dbc.Col([
+                dbc.Tabs([
+                    dbc.Tab(
+                        dbc.Card([
+                            dbc.CardHeader(
+                                dbc.DropdownMenu(
+                                    id='month-tab-dropdown-year-menu',
+                                    label="Year",
+                                    children=[
+                                        dbc.DropdownMenuItem("Item 1",
+                                                             id={'type': 'month-tab-dropdown-year', 'index': 0}),
+                                        dbc.DropdownMenuItem("Item 2",
+                                                             id={'type': 'month-tab-dropdown-year', 'index': 1}),
+                                        dbc.DropdownMenuItem("Item 3",
+                                                             id={'type': 'month-tab-dropdown-year', 'index': 2}),
+                                    ],
+                                )
+                            ),
+                            dbc.CardBody(
+                                [
+                                    dbc.Row([
+                                        dbc.Col(
+                                            dbc.Button(html.Span(['navigate_before'], className="material-icons")),
                                             width=1),
-                                    dbc.Col(dcc.Graph(figure=fig_month,
-                                                      style={'margin-top': '10px', 'margin-bottom': '10px'})),
-                                    dbc.Col(dbc.Button(html.Span(['navigate_next'], className="material-icons")),
+                                        dbc.Col(dcc.Graph(figure=fig_month(year, month),
+                                                          style={'margin-top': '10px', 'margin-bottom': '10px'})),
+                                        dbc.Col(
+                                            dbc.Button(html.Span(['navigate_next'], className="material-icons")),
                                             width=1)
-                                ], align="center")
-                            ]
-                        )],
-                        className="mt-3"
-                    )
-                    , label="Month"),
-                dbc.Tab(
-                    dbc.Card(
-                        dbc.CardBody(
-                            [
-                                dbc.Row([
-                                    dbc.Col(dbc.Button(html.Span(['navigate_before'], className="material-icons")),
+                                    ], align="center")
+                                ]
+                            )],
+                            className="mt-3"
+                        )
+                        , label="Month"),
+                    dbc.Tab(
+                        dbc.Card(
+                            dbc.CardBody(
+                                [
+                                    dbc.Row([
+                                        dbc.Col(
+                                            dbc.Button(html.Span(['navigate_before'], className="material-icons")),
                                             width=1),
-                                    dbc.Col(dcc.Graph(figure=fig_year,
-                                                      style={'margin-top': '10px', 'margin-bottom': '10px'})),
-                                    dbc.Col(dbc.Button(html.Span(['navigate_next'], className="material-icons")),
+                                        dbc.Col(dcc.Graph(figure=fig_year(year),
+                                                          style={'margin-top': '10px', 'margin-bottom': '10px'})),
+                                        dbc.Col(
+                                            dbc.Button(html.Span(['navigate_next'], className="material-icons")),
                                             width=1)
-                                ], align="center")
-                            ]
-                        ),
-                        className="mt-3"
-                    )
-                    , label="Year"),
-            ]
-            )
+                                    ], align="center")
+                                ]
+                            ),
+                            className="mt-3"
+                        )
+                        , label="Year"),
+                ]
+                )
+            ])
         ])
     ])
-])
+
+    return layout

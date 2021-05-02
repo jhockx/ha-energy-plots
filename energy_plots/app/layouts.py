@@ -121,9 +121,6 @@ def energy_layout(year, month, energy_type):
                                 [
                                     dbc.Row([
                                         dbc.Col(
-                                            dbc.Button(html.Span(['navigate_before'], className="material-icons")),
-                                            width=1),
-                                        dbc.Col(
                                             dcc.Graph(
                                                 id={'type': 'figure',
                                                     'energy_type': energy_type,
@@ -132,9 +129,6 @@ def energy_layout(year, month, energy_type):
                                                 style={'margin-top': '1em', 'margin-bottom': '1em'}
                                             )
                                         ),
-                                        dbc.Col(
-                                            dbc.Button(html.Span(['navigate_next'], className="material-icons")),
-                                            width=1)
                                     ], align="center")
                                 ]
                             )],
@@ -161,9 +155,6 @@ def energy_layout(year, month, energy_type):
                                 [
                                     dbc.Row([
                                         dbc.Col(
-                                            dbc.Button(html.Span(['navigate_before'], className="material-icons")),
-                                            width=1),
-                                        dbc.Col(
                                             dcc.Graph(
                                                 id={'type': 'figure',
                                                     'energy_type': energy_type,
@@ -172,9 +163,6 @@ def energy_layout(year, month, energy_type):
                                                 style={'margin-top': '10px', 'margin-bottom': '10px'}
                                             )
                                         ),
-                                        dbc.Col(
-                                            dbc.Button(html.Span(['navigate_next'], className="material-icons")),
-                                            width=1)
                                     ], align="center")
                                 ]
                             )],

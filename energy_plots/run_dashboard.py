@@ -20,8 +20,10 @@ from app.backend import main_thread
 
 app.logger.info('Booting dashboard...')
 
-if __name__ == '__main__':
+app.logger.info('Starting main thread...')
+if app.server.config['ENV'] != 'development':
     t = Thread(target=main_thread, daemon=True)
     t.start()
 
-    app.run_server(debug=True)
+app.logger.info('Starting server')
+app.run_server(host="0.0.0.0", port=8050, debug=app.server.config['DEBUG'], dev_tools_hot_reload=False)

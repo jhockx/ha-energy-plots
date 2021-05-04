@@ -2,7 +2,7 @@
   "name": "Energy Plots",
   "version": "0.12.2",
   "slug": "energy_plots",
-  "description": "This addon makes plots for your energy data, specifically for electricity, solar and gas data. It is assumed you are running InfluxDB as long term data storage.",
+  "description": "This addon makes plots for your energy data in InfluxDB, specifically for electricity usage, solar generation and gas usage data",
   "arch": [
     "armv7"
   ],
@@ -14,28 +14,34 @@
     "port": null,
     "username": null,
     "password": null,
-    "daily_gas_usage": "none",
-    "daily_electricity_usage": "none",
-    "daily_yield": "none",
-    "daily_gas_usage_monthly_avg": "False",
-    "daily_electricity_usage_monthly_avg": "False",
-    "daily_yield_monthly_avg": "False",
-    "predicted_solar": "none"
+    "db_unit_prefix": "",
+    "db_unit_suffix": "",
+    "daily electricity usage db entity": "",
+    "daily yield db entity": "",
+    "daily gas usage db entity": "",
+    "plot average electricity usage": "False",
+    "plot average yield": "False",
+    "plot average gas usage": "False",
+    "predicted solar": "",
+    "refresh time": 300
   },
   "schema": {
     "host": "str",
-    "port": "int",
+    "port": "port",
     "username": "str",
-    "password": "str",
-    "daily_gas_usage": "str",
-    "daily_electricity_usage": "str",
-    "daily_yield": "str",
-    "daily_gas_usage_monthly_avg": "str",
-    "daily_electricity_usage_monthly_avg": "str",
-    "daily_yield_monthly_avg": "str",
-    "predicted_solar": "str"
+    "password": "password",
+    "db_unit_prefix": "str?",
+    "db_unit_suffix": "str?",
+    "daily electricity usage db entity": "str?",
+    "daily yield db entity": "str?",
+    "daily gas usage db entity": "str?",
+    "plot average electricity usage": "str",
+    "plot average yield": "str",
+    "plot average gas usage": "str",
+    "predicted solar": "str?",
+    "refresh time": "int"
   },
   "ports": {
-    "8000/tcp": 8000
+    "8050/tcp": 8050
   }
 }

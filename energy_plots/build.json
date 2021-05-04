@@ -1,5 +1,5 @@
 {
   "build_from": {
-	"armv7": "jhockx/armv7-ha-python:0.1"
+    "armv7": "jhockx/armv7-ha-python:0.2"
   }
 }

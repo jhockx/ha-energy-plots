@@ -46,7 +46,9 @@ app.validation_layout = html.Div([
     layouts.electricity_layout()
 ])
 
+app.logger.info('App initialized')
 sleep(1)
 
 # Import the rest after initialization of app to prevent circular imports
+app.logger.info('Importing backend, callbacks, routes')
 from app import backend, callbacks, routes

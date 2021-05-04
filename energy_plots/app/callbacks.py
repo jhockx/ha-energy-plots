@@ -21,6 +21,8 @@ from app.layouts import dropdown_month_menu, fig_month, fig_year
     ]
 )
 def dropdown_year_click(n_clicks, children, label_year):
+    app.logger.info('Dropdown for year was clicked, processing callback')
+
     clicked_element = None
     prop_id = callback_context.triggered[0]['prop_id']
     if prop_id != '.' and n_clicks.count(None) != len(n_clicks):
@@ -38,6 +40,7 @@ def dropdown_year_click(n_clicks, children, label_year):
         months_dropdown_menu_items = []
         months_dropdown_menu_disabled = True
 
+    app.logger.info('Done processing callback')
     return label_year, months_dropdown_menu_items, months_dropdown_menu_disabled
 
 
@@ -50,6 +53,8 @@ def dropdown_year_click(n_clicks, children, label_year):
     ]
 )
 def dropdown_month_click(n_clicks, children, label_month):
+    app.logger.info('Dropdown for month was clicked, processing callback')
+
     clicked_element = None
     prop_id = callback_context.triggered[0]['prop_id']
     if prop_id != '.' and n_clicks.count(None) != len(n_clicks):
@@ -57,6 +62,7 @@ def dropdown_month_click(n_clicks, children, label_month):
 
     label_month = list(children)[clicked_element['index']] if clicked_element is not None else label_month
 
+    app.logger.info('Done processing callback')
     return label_month
 
 
@@ -67,7 +73,9 @@ def dropdown_month_click(n_clicks, children, label_month):
         Input({'type': 'dropdown-year-menu', 'energy_type': MATCH, 'tab': MATCH}, 'label')
     ]
 )
-def dropdown_month_click(label_month, label_year):
+def dropdown_labels_changed(label_month, label_year):
+    app.logger.info('Dropdown labels have changed, processing callback')
+
     triggered_items = []
     if label_year != 'Year':
         for item in callback_context.triggered:
@@ -78,8 +86,11 @@ def dropdown_month_click(label_month, label_year):
         energy_type = triggered_items[0]['energy_type']
 
         if tab == 'month' and label_year != 'Year' and label_month != 'Month':
+            app.logger.info('Done processing callback')
             return fig_month(int(label_year), int(label_month), energy_type)
         elif tab == 'year' and label_year != 'Year':
+            app.logger.info('Done processing callback')
             return fig_year(int(label_year), energy_type)
 
+    app.logger.info('Done processing callback')
     raise PreventUpdate

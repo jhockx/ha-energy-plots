@@ -13,6 +13,8 @@ def display_page(pathname):
     This method is like the one in the documentation, except the routing is defined in the config instead of directly
     in this method, to have everything configurable in one place.
     """
+    app.logger.info(f'Page requested: {pathname}')
+
     for route in app.server.config['ROUTES']:
         # Reroute home page (doesn't change the url)
         if pathname == '/':

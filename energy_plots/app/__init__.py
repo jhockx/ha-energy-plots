@@ -9,9 +9,10 @@ from flask import Flask
 from app import layouts
 from configs import dash_config
 
-# Use existing Flask server:
+# Use Flask server:
 # https://dash.plotly.com/reference under dash.Dash server
-server = Flask(__name__)
+server = Flask(__name__, static_url_path='/plots', static_folder='../plots')
+
 # Load from object:
 # https://flask.palletsprojects.com/en/1.1.x/api/#flask.Config.from_object
 server.config.from_object(dash_config)

@@ -3,12 +3,13 @@ FROM $BUILD_FROM
 
 ENV LANG C.UTF-8
 
-WORKDIR /src
-COPY run.sh /
-COPY ./src/utils.py ./
-COPY ./src/plot_electricity.py ./
-COPY ./src/plot_gas.py ./
-
 WORKDIR /
-RUN chmod a+x /run.sh
-CMD [ "/run.sh" ]
+COPY run.sh /
+COPY ./app ./app
+COPY ./configs ./configs
+COPY ./plots ./plots
+COPY ./run_dashboard.py ./run_dashboard.py
+COPY ./run.sh ./run.sh
+
+RUN chmod a+x ./run.sh
+CMD [ "./run.sh" ]

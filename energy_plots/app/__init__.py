@@ -1,3 +1,4 @@
+import logging
 from time import sleep
 
 import dash_bootstrap_components as dbc
@@ -31,6 +32,13 @@ app = Dash(
         'https://fonts.googleapis.com/icon?family=Material+Icons'
     ]
 )
+
+logging.basicConfig(
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    level=app.server.config['LOGGER_LEVEL']
+)
+logger = logging.getLogger('dashboard')
+app.logger = logger
 
 # Dash dev tools:
 # https://dash.plotly.com/devtools

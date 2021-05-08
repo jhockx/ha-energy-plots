@@ -4,3 +4,5 @@ Pipfile.lock
 __pycache__
 venv
 data
+**/plots/*.json
+**/plots/*.html

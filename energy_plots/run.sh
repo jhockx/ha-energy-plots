@@ -15,4 +15,4 @@ ls plots
 echo ----
 echo 
 echo starting script
-python3 run_dashboard.py
+gunicorn run_dashboard:server -b 0.0.0.0:8050

@@ -19,6 +19,7 @@ from app import app
 from app.backend import main_thread
 
 app.logger.info('Booting dashboard...')
+server = app.server  # Necessary line for gunicorn
 
 app.logger.info('Starting main thread...')
 if app.server.config['ENV'] != 'development':
@@ -26,4 +27,6 @@ if app.server.config['ENV'] != 'development':
     t.start()
 
 app.logger.info('Starting server')
-app.run_server(host="0.0.0.0", port=8050, debug=app.server.config['DEBUG'], dev_tools_hot_reload=False)
+if __name__ == '__main__':
+    app.logger.warning('Running debug server!')
+    app.run_server(host="0.0.0.0", port=8050, debug=app.server.config['DEBUG'], dev_tools_hot_reload=False)

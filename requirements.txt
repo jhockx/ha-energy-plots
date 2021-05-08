@@ -6,4 +6,3 @@ pytz
 dash
 dash-bootstrap-components
 flask
-hypercorn

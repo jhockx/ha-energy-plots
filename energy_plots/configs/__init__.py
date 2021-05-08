@@ -8,6 +8,7 @@ class DashConfig:
     # DEBUG = False  # Default: True if ENV is 'development', or False otherwise.
     # TESTING = False  # Default: False
     # PROPAGATE_EXCEPTIONS = False  # Default: None. If not set, this is implicitly true if TESTING or DEBUG is enabled.
+    SEND_FILE_MAX_AGE_DEFAULT = 0  # Disables caching
 
     LOGGER_LEVEL = 'INFO'
 

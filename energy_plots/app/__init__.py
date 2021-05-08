@@ -22,6 +22,8 @@ server.config.from_object(dash_config)
 app = Dash(
     name='app',
     server=server,
+    meta_tags=[{'name': 'viewport',
+                'content': 'width=device-width, initial-scale=1.0, maximum-scale=1.0 user-scalable=no'}],
     external_stylesheets=[
         # Material design bootstrap theme:
         # https://dash-bootstrap-components.opensource.faculty.ai/docs/themes/

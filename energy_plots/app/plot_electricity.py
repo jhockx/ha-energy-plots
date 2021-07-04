@@ -24,8 +24,8 @@ def make_electricity_plots(settings, client, now):
     data = []
 
     if settings.get('daily electricity usage db entity'):
-        df = get_df_current_month(client, settings['daily electricity usage db entity'], settings['db_unit_prefix'],
-                                  settings['db_unit_suffix'], 'kWh', now)
+        df = get_df_current_month(client, settings['daily electricity usage db entity'], settings['db unit prefix'],
+                                  settings['db unit suffix'], 'kWh', now)
         # Fill missing rows with zero
         df = df.resample('D').max().fillna(0)
         trace = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
@@ -40,8 +40,8 @@ def make_electricity_plots(settings, client, now):
             data.append(trace)
 
     if settings.get('daily yield db entity'):
-        df = get_df_current_month(client, settings['daily yield db entity'], settings['db_unit_prefix'],
-                                  settings['db_unit_suffix'], 'kWh', now)
+        df = get_df_current_month(client, settings['daily yield db entity'], settings['db unit prefix'],
+                                  settings['db unit suffix'], 'kWh', now)
         # Fill missing rows with zero
         df = df.resample('D').max().fillna(0)
         trace = go.Bar(name='Opbrengst', x=df.index, y=df['value'], marker_color='limegreen')
@@ -83,14 +83,14 @@ def make_electricity_plots(settings, client, now):
     data = []
 
     if settings.get('daily electricity usage db entity'):
-        df = get_df_current_year(client, settings['daily electricity usage db entity'], settings['db_unit_prefix'],
-                                 settings['db_unit_suffix'], 'kWh', now)
+        df = get_df_current_year(client, settings['daily electricity usage db entity'], settings['db unit prefix'],
+                                 settings['db unit suffix'], 'kWh', now)
         trace1 = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
         data.append(trace1)
 
     if settings.get('daily yield db entity'):
-        df = get_df_current_year(client, settings['daily yield db entity'], settings['db_unit_prefix'],
-                                 settings['db_unit_suffix'], 'kWh', now)
+        df = get_df_current_year(client, settings['daily yield db entity'], settings['db unit prefix'],
+                                 settings['db unit suffix'], 'kWh', now)
         trace2 = go.Bar(name='Opbrengst', x=df.index, y=df['value'], marker_color='limegreen')
         data.append(trace2)
 

@@ -24,8 +24,8 @@ def make_gas_plots(settings, client, now):
     data = []
 
     if settings.get('daily gas usage db entity'):
-        df = get_df_current_month(client, settings['daily gas usage db entity'], settings['db_unit_prefix'],
-                                  settings['db_unit_suffix'], 'm3', now)
+        df = get_df_current_month(client, settings['daily gas usage db entity'], settings['db unit prefix'],
+                                  settings['db unit suffix'], 'm3', now)
         # Fill missing rows with zero
         df = df.resample('D').max().fillna(0)
         trace = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
@@ -58,8 +58,8 @@ def make_gas_plots(settings, client, now):
     data = []
 
     if settings.get('daily gas usage db entity'):
-        df = get_df_current_year(client, settings['daily gas usage db entity'], settings['db_unit_prefix'],
-                                 settings['db_unit_suffix'], 'm3', now)
+        df = get_df_current_year(client, settings['daily gas usage db entity'], settings['db unit prefix'],
+                                 settings['db unit suffix'], 'm3', now)
         trace1 = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
         data.append(trace1)
 

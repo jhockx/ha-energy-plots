@@ -33,12 +33,12 @@ def main_thread():
     if settings['daily electricity usage db entity'] is not None:
         min_datetime, max_datetime = \
             get_min_max_datetimes_from_db(client, settings['daily electricity usage db entity'],
-                                          settings['db_unit_prefix'], settings['db_unit_suffix'], 'kWh',
+                                          settings['db unit prefix'], settings['db unit suffix'], 'kWh',
                                           min_datetime, max_datetime)
     if settings['daily yield db entity'] is not None:
         min_datetime, max_datetime = \
             get_min_max_datetimes_from_db(client, settings['daily yield db entity'],
-                                          settings['db_unit_prefix'], settings['db_unit_suffix'], 'kWh',
+                                          settings['db unit prefix'], settings['db unit suffix'], 'kWh',
                                           min_datetime, max_datetime)
 
     app.logger.info('Making historical electricity and gas plots')

@@ -96,25 +96,21 @@ def energy_layout(year, month, energy_type):
                         dbc.Card([
                             dbc.CardHeader([
                                 dbc.Row([
-                                    dbc.Col(
-                                        dbc.DropdownMenu(
-                                            id={'type': 'dropdown-year-menu', 'energy_type': energy_type,
-                                                'tab': 'month'},
-                                            label="Year",
-                                            children=dropdown_year_menu(energy_type, 'month'),
-                                        ),
-                                        width=1
+                                    dbc.DropdownMenu(
+                                        id={'type': 'dropdown-year-menu', 'energy_type': energy_type,
+                                            'tab': 'month'},
+                                        label="Year",
+                                        children=dropdown_year_menu(energy_type, 'month'),
+                                        style={'padding-left': '15px'}
                                     ),
-                                    dbc.Col(
-                                        dbc.DropdownMenu(
-                                            id={'type': 'dropdown-month-menu', 'energy_type': energy_type,
-                                                'tab': 'month'},
-                                            label="Month",
-                                            children=[],
-                                            disabled=True
-                                        ),
-                                        width=1
-                                    )
+                                    dbc.DropdownMenu(
+                                        id={'type': 'dropdown-month-menu', 'energy_type': energy_type,
+                                            'tab': 'month'},
+                                        label="Month",
+                                        children=[],
+                                        disabled=True,
+                                        style={'padding-left': '15px'}
+                                    ),
                                 ])
                             ]),
                             dbc.CardBody(
@@ -139,12 +135,14 @@ def energy_layout(year, month, energy_type):
                         dbc.Card([
                             dbc.CardHeader([
                                 dbc.DropdownMenu(
-                                    id={'type': 'dropdown-year-menu', 'energy_type': energy_type, 'tab': 'year'},
+                                    id={'type': 'dropdown-year-menu', 'energy_type': energy_type,
+                                        'tab': 'year'},
                                     label="Year",
                                     children=dropdown_year_menu(energy_type, 'year'),
                                 ),
                                 dbc.DropdownMenu(
-                                    id={'type': 'dropdown-month-menu', 'energy_type': energy_type, 'tab': 'year'},
+                                    id={'type': 'dropdown-month-menu', 'energy_type': energy_type,
+                                        'tab': 'year'},
                                     label="Month",
                                     children=[],
                                     disabled=True,

@@ -9,6 +9,8 @@
   "url": "https://github.com/jhockx/ha-energy-plots",
   "startup": "application",
   "boot": "auto",
+  "panel_icon": "mdi:lightning-bolt",
+  "panel_title": "Energy Dashboard",
   "options": {
     "host": null,
     "port": null,

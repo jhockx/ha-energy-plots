@@ -40,9 +40,9 @@
     "daily electricity usage db entity": "str?",
     "daily yield db entity": "str?",
     "daily gas usage db entity": "str?",
-    "plot average electricity usage": "str",
-    "plot average yield": "str",
-    "plot average gas usage": "str",
+    "plot average electricity usage": "bool",
+    "plot average yield": "bool",
+    "plot average gas usage": "bool",
     "predicted solar": "str?",
     "refresh time": "int"
   },

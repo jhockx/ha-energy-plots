@@ -30,7 +30,7 @@ def make_electricity_plots(settings, client, now):
         df = df.resample('D').max().fillna(0)
         trace = go.Bar(name='Verbruik', x=df.index, y=df['value'], marker_color='blue')
         data.append(trace)
-        if bool(settings['plot average electricity usage']):
+        if settings['plot average electricity usage']:
             y = df['value'].replace(0, np.nan).mean()
             df = pd.DataFrame(data=[[first_day_of_the_month - timedelta(days=1), y],
                                     [last_day_of_the_month + timedelta(days=1), y]],

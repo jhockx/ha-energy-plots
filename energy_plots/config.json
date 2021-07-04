@@ -9,11 +9,13 @@
   "url": "https://github.com/jhockx/ha-energy-plots",
   "startup": "application",
   "boot": "auto",
+  "ingress": true,
   "panel_icon": "mdi:lightning-bolt",
   "panel_title": "Energy Dashboard",
   "options": {
     "host": null,
     "port": null,
+    "ingress hash": null,
     "username": null,
     "password": null,
     "db_unit_prefix": "",
@@ -30,6 +32,7 @@
   "schema": {
     "host": "str",
     "port": "port",
+    "ingress hash": "str",
     "username": "str",
     "password": "password",
     "db_unit_prefix": "str?",
@@ -44,6 +47,6 @@
     "refresh time": "int"
   },
   "ports": {
-    "8050/tcp": 8050
+    "8099/tcp": null
   }
 }

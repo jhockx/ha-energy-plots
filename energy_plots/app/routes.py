@@ -17,7 +17,7 @@ def display_page(pathname):
 
     for route in app.server.config['ROUTES']:
         # Reroute home page (doesn't change the url)
-        if pathname == '/':
+        if pathname == '/' or pathname == app.server.config['base_url']:
             pathname = '/electricity'
 
         if pathname == route['url']:
@@ -25,4 +25,4 @@ def display_page(pathname):
             # Here it is determined which layout is going to be returned
             return globals()[route['layout']]()
 
-    return '404'
+    return '404 - Page not found'

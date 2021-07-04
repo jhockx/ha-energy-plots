@@ -29,4 +29,4 @@ if app.server.config['ENV'] != 'development':
 app.logger.info('Starting server')
 if __name__ == '__main__':
     app.logger.warning('Running debug server!')
-    app.run_server(host="0.0.0.0", port=8050, debug=app.server.config['DEBUG'], dev_tools_hot_reload=False)
+    app.run_server(host="0.0.0.0", port=8099, debug=app.server.config['DEBUG'], dev_tools_hot_reload=False)

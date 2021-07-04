@@ -7,12 +7,12 @@ echo ----
 echo Files in app:
 ls app
 echo ----
-echo Files in app:
+echo Files in configs:
 ls configs
 echo ----
-echo Files in app:
+echo Files in plots:
 ls plots
 echo ----
 echo 
 echo starting script
-gunicorn run_dashboard:server -b 0.0.0.0:8050
+gunicorn run_dashboard:server -b 0.0.0.0:8099

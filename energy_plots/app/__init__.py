@@ -1,3 +1,4 @@
+import json
 import logging
 from time import sleep
 
@@ -56,6 +57,16 @@ app.validation_layout = html.Div([
     layouts.skeleton_layout,
     layouts.electricity_layout()
 ])
+
+# For Home Assistant using Ingress
+# https://community.home-assistant.io/t/introducing-hass-io-ingress/111502/62
+with open('./data/options.json', 'r') as f:
+    settings = json.load(f)
+    app.server.config['base_url'] = f'/api/hassio_ingress/{settings["ingress hash"]}/'
+app.config.update({
+    'requests_pathname_prefix': app.server.config['base_url'],
+    'routes_pathname_prefix': app.server.config['base_url']
+})
 
 app.logger.info('App initialized')
 sleep(1)
